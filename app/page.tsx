@@ -45,7 +45,7 @@ export default function PresellPage() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/images/background-gemeas.jpg')`,
+          backgroundImage: `url('https://i.postimg.cc/rpt9nM4F/Quality-Restoration-Ultra-HD-Captura-de-Tela-2025-07-29-a-s-19-19-49.jpg')`,
           backgroundSize: "cover",
           backgroundPosition: "center center",
           width: "100vw",
@@ -76,17 +76,34 @@ export default function PresellPage() {
           className="text-2xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
-          GÊMEAS{" "}
+          O que elas fazem{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,145,228,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
-            SCARLATT
+            juntas
           </span>
+          ... ninguém{" "}
+          <span
+            className="drop-shadow-lg text-yellow-400"
+            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
+          >
+            espera
+          </span>
+          . Clique e{" "}
+          <span
+            className="drop-shadow-lg text-[rgba(255,145,228,1)]"
+            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
+          >
+            descubra
+          </span>
+          .
         </h1>
 
         {/* Simple Description */}
-        <p className="mb-6 sm:mb-8 text-white text-xs">ACESSO INSTANTÂNEO AO CONTEÚDO EXCLUSIVO</p>
+        <p className="mb-6 sm:mb-8 text-white text-xs">
+          Gêmeas idênticas por fora. Mas completamente diferentes no que mostram no privado…
+        </p>
 
         {/* Stats */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2 mb-3 sm:mb-4 text-white">
@@ -122,7 +139,7 @@ export default function PresellPage() {
             }}
           >
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            VER NO TELEGRAM
+            QUERO VER AS PRÉVIAS AGORA
           </Button>
         </a>
 
@@ -130,7 +147,7 @@ export default function PresellPage() {
         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-300">
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="bg-transparent text-white">Instantâneo</span>
+            <span className="bg-transparent text-white">Liberado agora. Mas só por pouco tempo.</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
@@ -138,7 +155,7 @@ export default function PresellPage() {
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white">Sem Compromisso</span>
+            <span className="text-white">Prévias exclusivas para você</span>
           </div>
         </div>
       </div>
