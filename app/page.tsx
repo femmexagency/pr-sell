@@ -132,7 +132,7 @@ export default function PresellPage() {
         >
           <Button
             size="lg"
-            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-lg shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4 sm:text-lg"
+            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4"
             style={{
               filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
               boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
