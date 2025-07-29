@@ -169,7 +169,7 @@ export default function PresellPage() {
       </div>
 
       {/* Online Counter */}
-      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-black/70 text-white px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm">
+      <div className="absolute bottom-8 right-4 sm:bottom-12 sm:right-6 bg-black/70 text-white px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm">
         <div className="text-center">
           <div className="text-base sm:text-lg font-bold">2.847</div>
           <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
