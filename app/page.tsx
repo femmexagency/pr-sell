@@ -5,6 +5,12 @@ import { MessageCircle, Users, Star, Check, AlertTriangle } from "lucide-react"
 import { Montserrat } from "next/font/google"
 import { useState, useEffect } from "react"
 
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["700", "900"],
+  display: "swap",
+})
+
 const pulseKeyframes = `
   @keyframes borderPulse {
     0%, 100% {
@@ -18,21 +24,69 @@ const pulseKeyframes = `
   }
 `
 
-// Add the style tag to inject the keyframes
-if (typeof document !== "undefined") {
-  const style = document.createElement("style")
-  style.textContent = pulseKeyframes
-  document.head.appendChild(style)
-}
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["700", "900"],
-  display: "swap",
-})
-
 export default function PresellPage() {
   const [userCount, setUserCount] = useState(1688)
+
+  // Proteções contra cópia
+  const useCopyProtection = () => {
+    useEffect(() => {
+      // Desabilitar clique direito
+      const handleContextMenu = (e: MouseEvent) => {
+        e.preventDefault()
+        return false
+      }
+
+      // Desabilitar teclas de desenvolvedor
+      const handleKeyDown = (e: KeyboardEvent) => {
+        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        if (
+          e.key === "F12" ||
+          (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+          (e.ctrlKey && e.key === "u")
+        ) {
+          e.preventDefault()
+          return false
+        }
+      }
+
+      // Desabilitar seleção de texto
+      const handleSelectStart = (e: Event) => {
+        e.preventDefault()
+        return false
+      }
+
+      // Desabilitar arrastar imagens
+      const handleDragStart = (e: DragEvent) => {
+        e.preventDefault()
+        return false
+      }
+
+      // Adicionar event listeners
+      document.addEventListener("contextmenu", handleContextMenu)
+      document.addEventListener("keydown", handleKeyDown)
+      document.addEventListener("selectstart", handleSelectStart)
+      document.addEventListener("dragstart", handleDragStart)
+
+      // Cleanup
+      return () => {
+        document.removeEventListener("contextmenu", handleContextMenu)
+        document.removeEventListener("keydown", handleKeyDown)
+        document.removeEventListener("selectstart", handleSelectStart)
+        document.removeEventListener("dragstart", handleDragStart)
+      }
+    }, [])
+  }
+
+  useCopyProtection()
+
+  useEffect(() => {
+    // Add pulse keyframes
+    if (typeof document !== "undefined") {
+      const style = document.createElement("style")
+      style.textContent = pulseKeyframes
+      document.head.appendChild(style)
+    }
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(
@@ -58,8 +112,15 @@ export default function PresellPage() {
 
   return (
     <div
-      className={`min-h-screen w-full relative overflow-hidden flex items-center justify-center px-2 ${montserrat.className}`}
-      style={{ minHeight: "100vh", width: "100vw" }}
+      className={`min-h-screen w-full relative overflow-hidden flex items-center justify-center px-2 select-none ${montserrat.className}`}
+      style={{
+        minHeight: "100vh",
+        width: "100vw",
+        userSelect: "none",
+        WebkitUserSelect: "none",
+        MozUserSelect: "none",
+        msUserSelect: "none",
+      }}
     >
       {/* Background Image */}
       <div
