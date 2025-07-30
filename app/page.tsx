@@ -80,7 +80,7 @@ export default function PresellPage() {
       <div className="relative z-10 text-center px-4 max-w-lg w-full">
         {/* Main Headline */}
         <h1
-          className="text-lg sm:text-2xl font-bold text-white mb-6 leading-tight md:text-3xl uppercase"
+          className="text-xl sm:text-3xl font-bold text-white mb-6 leading-tight md:text-4xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
           O QUE ELAS FAZEM{" "}
@@ -118,27 +118,27 @@ export default function PresellPage() {
           />
           {/* Watermark */}
           <div
-            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[80%] h-[10%] bg-gradient-to-r from-yellow-400 to-yellow-300 flex items-center justify-center backdrop-blur-sm border-t-2 border-b-2 border-black"
+            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[90%] h-[10%] bg-gradient-to-r from-yellow-400 to-yellow-300 flex items-center justify-center backdrop-blur-sm border-t-2 border-b-2 border-black"
             style={{ transform: "translateX(-50%) rotate(-1deg)" }}
           >
             <div
               className="flex items-center gap-2 text-black text-xs font-bold uppercase"
               style={{ textShadow: "1px 1px 2px rgba(255,255,255,0.5)" }}
             >
-              <AlertTriangle className="w-3 h-3 text-black" />
+              <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
               <span className="tracking-widest font-black">⚠️ CONTEÚDO RESTRITO ⚠️</span>
-              <AlertTriangle className="w-3 h-3 text-black" />
+              <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
             </div>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <div className="flex flex-row justify-center items-center gap-1 sm:gap-2 mb-2 sm:mb-3">
           {/* User Count - Custom Badge Style */}
-          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-2 py-1 rounded-full shadow-lg border-2 border-white/20">
+          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-1.5 py-0.5 rounded-full shadow-lg border-2 border-white/20">
             <div className="flex items-center gap-2">
               <Users className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-              <span className="text-xs font-bold">
+              <span className="text-[10px] sm:text-xs font-bold">
                 <span className="font-black text-sm sm:text-base" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
                   {userCount}
                 </span>{" "}
@@ -148,12 +148,12 @@ export default function PresellPage() {
           </div>
 
           {/* Rating - Custom Card Style */}
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-2 py-1 rounded-full shadow-lg border-2 border-white/30">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-1.5 py-0.5 rounded-full shadow-lg border-2 border-white/30">
             <div className="flex items-center gap-2">
               <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-black text-black" />
-              <span className="font-black text-xs">
+              <span className="font-black text-[10px] sm:text-xs">
                 <span className="text-sm sm:text-base">4.9</span>
-                <span className="text-xs font-bold">/5</span>
+                <span className="text-[10px] sm:text-xs font-bold">/5</span>
               </span>
             </div>
           </div>
@@ -202,23 +202,6 @@ export default function PresellPage() {
         <div className="text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1 bg-[rgba(255,0,0,1)]">
           <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
           ÚLTIMAS VAGAS DO GRUPO
-        </div>
-      </div>
-
-      {/* Online Counter */}
-      <div
-        className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-black/70 text-white px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm border-2 border-[#4ADE80]"
-        style={{
-          animation: "borderPulse 2s ease-in-out infinite",
-          filter: "drop-shadow(0 0 8px rgba(74, 222, 128, 0.5))",
-        }}
-      >
-        <div className="text-center">
-          <div className="text-base sm:text-lg font-bold">2.847</div>
-          <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            online
-          </div>
         </div>
       </div>
     </div>
