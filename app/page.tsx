@@ -78,18 +78,9 @@ export default function PresellPage() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-lg w-full">
-        {/* Profile Image */}
-        <div className="mb-3 sm:mb-4">
-          <img
-            src="/images/profile-gemeas-final.jpg"
-            alt="Gêmeas Scarlatt"
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto border-2 border-[#FF0000] object-cover"
-          />
-        </div>
-
         {/* Main Headline */}
         <h1
-          className="text-lg sm:text-2xl font-bold text-white mb-4 leading-tight md:text-3xl uppercase"
+          className="text-lg sm:text-2xl font-bold text-white mb-6 leading-tight md:text-3xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
           O QUE ELAS FAZEM{" "}
@@ -127,7 +118,7 @@ export default function PresellPage() {
           />
           {/* Watermark */}
           <div
-            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[65%] h-[10%] bg-gradient-to-r from-yellow-400 to-yellow-300 flex items-center justify-center backdrop-blur-sm border-t-2 border-b-2 border-black"
+            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[80%] h-[10%] bg-gradient-to-r from-yellow-400 to-yellow-300 flex items-center justify-center backdrop-blur-sm border-t-2 border-b-2 border-black"
             style={{ transform: "translateX(-50%) rotate(-1deg)" }}
           >
             <div
@@ -142,13 +133,13 @@ export default function PresellPage() {
         </div>
 
         {/* Stats */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           {/* User Count - Custom Badge Style */}
-          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-3 py-1.5 rounded-full shadow-lg border-2 border-white/20">
+          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-2 py-1 rounded-full shadow-lg border-2 border-white/20">
             <div className="flex items-center gap-2">
               <Users className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-              <span className="text-xs sm:text-sm font-bold">
-                <span className="font-black text-base sm:text-lg" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
+              <span className="text-xs font-bold">
+                <span className="font-black text-sm sm:text-base" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
                   {userCount}
                 </span>{" "}
                 <span className="font-semibold">Usuários</span>
@@ -157,11 +148,11 @@ export default function PresellPage() {
           </div>
 
           {/* Rating - Custom Card Style */}
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-3 py-1.5 rounded-full shadow-lg border-2 border-white/30">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-2 py-1 rounded-full shadow-lg border-2 border-white/30">
             <div className="flex items-center gap-2">
               <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-black text-black" />
-              <span className="font-black text-xs sm:text-sm">
-                <span className="text-base sm:text-lg">4.9</span>
+              <span className="font-black text-xs">
+                <span className="text-sm sm:text-base">4.9</span>
                 <span className="text-xs font-bold">/5</span>
               </span>
             </div>
@@ -216,7 +207,7 @@ export default function PresellPage() {
 
       {/* Online Counter */}
       <div
-        className="absolute bottom-16 right-4 sm:bottom-20 sm:right-6 bg-black/70 text-white px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm border-2 border-[#4ADE80]"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-black/70 text-white px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm border-2 border-[#4ADE80]"
         style={{
           animation: "borderPulse 2s ease-in-out infinite",
           filter: "drop-shadow(0 0 8px rgba(74, 222, 128, 0.5))",
