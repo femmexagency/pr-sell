@@ -90,7 +90,7 @@ export default function PresellPage() {
         </h1>
 
         {/* Image below headline */}
-        <div className="mb-3 sm:mb-4">
+        <div className="mb-3 sm:mb-4 relative">
           <img
             src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
             alt="Design"
@@ -101,6 +101,11 @@ export default function PresellPage() {
               width: "100%",
             }}
           />
+          {/* Watermark */}
+          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1 backdrop-blur-sm">
+            <Check className="w-3 h-3 text-blue-400" />
+            <span className="font-semibold">gemeas_scarlatt</span>
+          </div>
         </div>
 
         {/* Stats */}
