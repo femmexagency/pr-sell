@@ -73,48 +73,56 @@ export default function PresellPage() {
 
         {/* Main Headline */}
         <h1
-          className="text-2xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl"
+          className="text-2xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
-          O que elas fazem{" "}
+          O QUE ELAS FAZEM{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
-            juntas
-          </span>
-          ... ninguém{" "}
-          <span
-            className="drop-shadow-lg text-yellow-400"
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
-          >
-            espera
-          </span>
-          . Clique e{" "}
+            JUNTAS
+          </span>{" "}
+          NINGUÉM ESPERA.{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
-            descubra
+            DESCUBRA
+          </span>{" "}
+          <span
+            className="drop-shadow-lg text-white"
+            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
+          >
+            AGORA
           </span>
           .
         </h1>
 
         {/* Stats */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2 mb-3 sm:mb-4 text-white">
-          <div className="flex items-center gap-1">
-            <Users className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-black" />
-            <span className="font-semibold text-xs sm:text-sm">
-              <span className="font-extrabold" style={{ fontFamily: "Montserrat", fontWeight: 800 }}>
-                {userCount}
-              </span>{" "}
-              Usuários
-            </span>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+          {/* User Count - Custom Badge Style */}
+          <div className="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-full shadow-lg border-2 border-white/20">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <span className="text-sm sm:text-base font-bold">
+                <span className="font-black text-lg sm:text-xl" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
+                  {userCount}
+                </span>{" "}
+                <span className="font-semibold">Usuários</span>
+              </span>
+            </div>
           </div>
-          <div className="hidden sm:block w-0.5 h-0.5 bg-white rounded-full"></div>
-          <div className="flex items-center gap-0.5">
-            <Star className="w-1.5 h-1.5 sm:w-2 sm:h-2 fill-yellow-400 text-yellow-400" />
-            <span className="font-semibold text-xs sm:text-sm">4.9/5</span>
+
+          {/* Rating - Custom Card Style */}
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-4 py-2 rounded-full shadow-lg border-2 border-white/30">
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-black text-black" />
+              <span className="font-black text-sm sm:text-base">
+                <span className="text-lg sm:text-xl">4.9</span>
+                <span className="text-xs sm:text-sm font-bold">/5</span>
+              </span>
+            </div>
           </div>
         </div>
 
