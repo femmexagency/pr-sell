@@ -63,17 +63,13 @@ export default function PresellPage() {
           <img
             src="/images/profile-gemeas-final.jpg"
             alt="Gêmeas Scarlatt"
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto border-2 border-[#FF0000] shadow-lg object-cover"
-            style={{
-              filter: "drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8))",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.6)",
-            }}
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto border-2 border-[#FF0000] object-cover"
           />
         </div>
 
         {/* Main Headline */}
         <h1
-          className="text-xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl uppercase"
+          className="text-lg sm:text-2xl font-bold text-white mb-4 leading-tight md:text-3xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
           O QUE ELAS FAZEM{" "}
@@ -93,14 +89,28 @@ export default function PresellPage() {
           .
         </h1>
 
+        {/* Image below headline */}
+        <div className="mb-3 sm:mb-4">
+          <img
+            src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+            alt="Design"
+            className="mx-auto max-w-full h-auto"
+            style={{
+              filter: "blur(1px)",
+              maxWidth: "300px",
+              width: "100%",
+            }}
+          />
+        </div>
+
         {/* Stats */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
           {/* User Count - Custom Badge Style */}
-          <div className="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-full shadow-lg border-2 border-white/20">
+          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-3 py-1.5 rounded-full shadow-lg border-2 border-white/20">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              <span className="text-sm sm:text-base font-bold">
-                <span className="font-black text-lg sm:text-xl" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
+              <Users className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+              <span className="text-xs sm:text-sm font-bold">
+                <span className="font-black text-base sm:text-lg" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
                   {userCount}
                 </span>{" "}
                 <span className="font-semibold">Usuários</span>
@@ -109,12 +119,12 @@ export default function PresellPage() {
           </div>
 
           {/* Rating - Custom Card Style */}
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-4 py-2 rounded-full shadow-lg border-2 border-white/30">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-3 py-1.5 rounded-full shadow-lg border-2 border-white/30">
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-black text-black" />
-              <span className="font-black text-sm sm:text-base">
-                <span className="text-lg sm:text-xl">4.9</span>
-                <span className="text-xs sm:text-sm font-bold">/5</span>
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-black text-black" />
+              <span className="font-black text-xs sm:text-sm">
+                <span className="text-base sm:text-lg">4.9</span>
+                <span className="text-xs font-bold">/5</span>
               </span>
             </div>
           </div>
@@ -129,7 +139,7 @@ export default function PresellPage() {
         >
           <Button
             size="lg"
-            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4"
+            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4 border-2 border-[#66c2ff]"
             style={{
               filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
               boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
