@@ -52,8 +52,8 @@ export default function PresellPage() {
           height: "100vh",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-[#ff91e4]/80 via-[#ff91e4]/30 to-[#ff91e4]/10 backdrop-blur-sm" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        {/* Black Gradient with Backdrop Blur */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent backdrop-blur-sm" />
       </div>
 
       {/* Content */}
@@ -63,7 +63,7 @@ export default function PresellPage() {
           <img
             src="/images/profile-gemeas-final.jpg"
             alt="Gêmeas Scarlatt"
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto border-2 border-pink-400 shadow-lg object-cover"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto border-2 border-[#FF0000] shadow-lg object-cover"
             style={{
               filter: "drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8))",
               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.6)",
@@ -78,7 +78,7 @@ export default function PresellPage() {
         >
           O que elas fazem{" "}
           <span
-            className="drop-shadow-lg text-[rgba(255,145,228,1)]"
+            className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
             juntas
@@ -92,18 +92,13 @@ export default function PresellPage() {
           </span>
           . Clique e{" "}
           <span
-            className="drop-shadow-lg text-[rgba(255,145,228,1)]"
+            className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
             descubra
           </span>
           .
         </h1>
-
-        {/* Simple Description */}
-        <p className="mb-6 sm:mb-8 text-white text-xs">
-          Gêmeas idênticas por fora. Mas completamente diferentes no que mostram no privado…
-        </p>
 
         {/* Stats */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2 mb-3 sm:mb-4 text-white">
@@ -147,22 +142,22 @@ export default function PresellPage() {
         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-300">
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="bg-transparent text-white">Liberado agora. Mas só por pouco tempo.</span>
+            <span className="bg-transparent text-white italic">Liberado agora. Mas só por pouco tempo.</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white">Privado</span>
+            <span className="text-white italic">Privado</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white">Prévias exclusivas para você</span>
+            <span className="text-white italic">Prévias exclusivas para você</span>
           </div>
         </div>
       </div>
 
       {/* Live Indicator */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-        <div className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold animate-pulse flex items-center gap-1">
+        <div className="text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold animate-pulse flex items-center gap-1 bg-[rgba(255,0,0,1)]">
           <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
           ÚLTIMAS VAGAS DO GRUPO
         </div>
