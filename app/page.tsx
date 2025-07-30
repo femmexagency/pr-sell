@@ -73,7 +73,7 @@ export default function PresellPage() {
 
         {/* Main Headline */}
         <h1
-          className="text-2xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl uppercase"
+          className="text-xl sm:text-3xl font-bold text-white mb-4 leading-tight md:text-4xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
           O QUE ELAS FAZEM{" "}
@@ -83,18 +83,12 @@ export default function PresellPage() {
           >
             JUNTAS
           </span>{" "}
-          NINGUÉM ESPERA.{" "}
+          NINGUÉM ESPERA. CLIQUE E{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
           >
             DESCUBRA
-          </span>{" "}
-          <span
-            className="drop-shadow-lg text-white"
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
-          >
-            AGORA
           </span>
           .
         </h1>
