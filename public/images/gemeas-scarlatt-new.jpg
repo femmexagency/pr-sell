@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="//postimgs.org/apple-touch-icon.png"/>
 <link rel="stylesheet" href="//postimgs.org/195/style.css"/>
 <link rel="canonical" href="https://postimg.cc/75j18fCN" />
-<script async src="https://cdn.usefulcontentsites.com/js/push/subscribe.js?v=7"></script></head>
+</head>
 <body class="generic">
 <header class="sb-slide">
 <div class="container-fluid">
@@ -28,7 +28,7 @@
 <div id="controls" class="controls" data-image="75j18fCN">
 <nobr>
 <span id="zoombtn" class="btn btn-sm"><i class="fa fa-lg fa-search-plus"></i>Zoom</span>
-<a href="https://i.postimg.cc/Pdm9Bbcf/Quality-Restoration-Ultra-HD-IMG-7648.jpg?dl=1" id="download" data-toggle="tooltip" data-placement="bottom" title="2880 x 5120 - JPG 2.2 MB" class="btn btn-sm"><i class="fa fa-lg fa-download"></i>Download original image</a>
+<a href="https://i.postimg.cc/Pdm9Bbcf/Quality-Restoration-Ultra-HD-IMG-7648.jpg" id="download" data-toggle="tooltip" data-placement="bottom" title="2880 x 5120 - JPG 2.2 MB" class="btn btn-sm"><i class="fa fa-lg fa-download"></i>Download original image</a>
 <span class="btn btn-sm btn-collapse collapsed" aria-expanded="false" aria-controls="share" data-toggle="collapse" data-target="#share"><i class="fa fa-lg fa-codes"></i>Share</span>
 </nobr>	
 	<nobr><span data-href="http://www.facebook.com/share.php?u=https%3A%2F%2Fpostimg.cc%2F75j18fCN" class="btn btn-sm sh-link" data-toggle="tooltip" data-placement="bottom" title=" Facebook "><i class="fas fa-lg fa-fa"></i></span> <span data-href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpostimg.cc%2F75j18fCN&url=https%3A%2F%2Fpostimg.cc%2F75j18fCN&text=Quality%20Restoration%20Ultra%20HD%20IMG%207648%20%E2%80%94%20Postimages&via=postimage" class="btn btn-sm sh-link" data-toggle="tooltip" data-placement="bottom" title=" Twitter "><i class="fas fa-lg fa-tt"></i></span> <span data-href="http://reddit.com/submit?url=https%3A%2F%2Fpostimg.cc%2F75j18fCN" class="btn btn-sm sh-link" data-toggle="tooltip" data-placement="bottom" title=" reddit "><i class="fas fa-lg fa-re"></i></span> <span data-href="http://vk.com/share.php?url=https%3A%2F%2Fpostimg.cc%2F75j18fCN" class="btn btn-sm sh-link" data-toggle="tooltip" data-placement="bottom" title=" VK "><i class="fas fa-lg fa-vv"></i></span> </nobr><nobr><span data-href="mailto:?subject=Quality%20Restoration%20Ultra%20HD%20IMG%207648%20%E2%80%94%20Postimages&body=https%3A%2F%2Fpostimg.cc%2F75j18fCN" class="btn btn-sm sh-link" data-toggle="tooltip" data-placement="bottom" title=" Email "><i class="fas fa-lg fa-ma"></i></span> </nobr><span class="btn btn-danger btn-sm" data-action="block" data-toggle="modal" data-target="#abuseModal"><i class="fa fa-lg fa-flag"></i>Report abuse</span>
@@ -48,7 +48,7 @@
 </form></div></div>
 <div id="show-image" class="container show-image">
 <div class="td-image" id="td-image">
-<div class="adsbyvli" data-ad-slot="vi_427113738"></div><br /><script>(vitag.Init = window.vitag.Init || []).push(function(){viAPItag.display("vi_427113738")})</script><div id="image-outer">
+<div id="image-outer">
 <img id="main-image" src="https://i.postimg.cc/R0Zgtt42/Quality-Restoration-Ultra-HD-IMG-7648.jpg" style="display:block;width:100%;max-width:450px;" class="zoom" width="450" height="800" /></div>
 <p class="no-print">
 <span class="imagename">Quality Restoration-Ultra HD-IMG_7648</span>
@@ -68,5 +68,5 @@
 <div id="abuseReport">Please report this image if it contains child sexual abuse, hate speech, privacy breach, or otherwise violates our <a href="https://postimages.org/terms">Terms</a>.</div>
 <form id="abuseForm" style="margin-top:0"><div style="text-align: right; margin-top:10px; padding-top:10px; border-top: 1px solid #e8e8e8"><button type="button" class="btn btn-danger" id="abuseBtn" data-loading-text="Sending...">Report</button> <button type="button" class="btn" data-dismiss="modal">Cancel</button></div></form>
 </div></div></div></div><script>var networkError="Network error";var copiedMessage="Copied!";var imageRemove="Remove this image?";var shareLabel="Share";var removeLabel="Remove";</script>
-<div class="modal fade" id="apiModal" role="dialog"><div class="modal-dialog modal-md"><div class="modal-content"><div class="modal-header"><p>Error</p></div><div class="modal-body"><p id="apierror"></p><div style="text-align: right; margin-top:10px"><button type="button" class="btn btn-warning" data-dismiss="modal">Close</button></div></div></div></div></div><script src="//postimgs.org/195/global.js"></script><script>(function (d) {window.rum = {key: '8uf7byn7'};var script = d.createElement('script');script.src = 'https://cdn.perfops.net/rom3/rom3.min.js';script.type = 'text/javascript';script.defer = true;script.async = true;d.getElementsByTagName('head')[0].appendChild(script);})(document);</script></body>
+<div class="modal fade" id="apiModal" role="dialog"><div class="modal-dialog modal-md"><div class="modal-content"><div class="modal-header"><p>Error</p></div><div class="modal-body"><p id="apierror"></p><div style="text-align: right; margin-top:10px"><button type="button" class="btn btn-warning" data-dismiss="modal">Close</button></div></div></div></div></div><script src="//postimgs.org/195/global.js"></script></body>
 </html>

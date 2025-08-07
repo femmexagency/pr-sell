@@ -1,15 +1,14 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter } from 'next/font/google'
 import "./globals.css"
-import "./protection.css"
 import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Gêmeas Scarlatt - Acesso Exclusivo",
-  description: "Acesso instantâneo ao conteúdo exclusivo das Gêmeas Scarlatt",
+  title: "Scarlatt Twins - Exclusive Access",
+  description: "Instant access to exclusive Scarlatt Twins content",
     generator: 'v0.dev'
 }
 
@@ -19,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <head>
         {/* Meta Pixel Code */}
         <Script id="meta-pixel" strategy="afterInteractive">

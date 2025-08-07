@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Users, Star, Check, AlertTriangle } from "lucide-react"
-import { Montserrat } from "next/font/google"
+import { MessageCircle, Users, Star, Check, AlertTriangle } from 'lucide-react'
+import { Montserrat } from 'next/font/google'
 import { useState, useEffect } from "react"
 
 const montserrat = Montserrat({
@@ -144,23 +144,23 @@ export default function PresellPage() {
           className="text-xl sm:text-3xl font-bold text-white mb-6 leading-tight md:text-4xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
-          O QUE ELAS FAZEM{" "}
+          WHAT THEY DO{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{
               textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
             }}
           >
-            JUNTAS
+            TOGETHER
           </span>{" "}
-          NINGUÉM ESPERA, CLIQUE E{" "}
+          NO ONE EXPECTS, CLICK AND{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{
               textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
             }}
           >
-            DESCUBRA
+            DISCOVER
           </span>
           ...
         </h1>
@@ -187,7 +187,7 @@ export default function PresellPage() {
               style={{ textShadow: "1px 1px 2px rgba(255,255,255,0.5)" }}
             >
               <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
-              <span className="tracking-widest font-black">⚠️ CONTEÚDO RESTRITO ⚠️</span>
+              <span className="tracking-widest font-black">⚠️ RESTRICTED CONTENT ⚠️</span>
               <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function PresellPage() {
                 <span className="font-black text-sm sm:text-base" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
                   {userCount}
                 </span>{" "}
-                <span className="font-semibold">Usuários</span>
+                <span className="font-semibold">Users</span>
               </span>
             </div>
           </div>
@@ -237,7 +237,7 @@ export default function PresellPage() {
             }}
           >
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            QUERO VER AS PRÉVIAS AGORA
+            I WANT TO SEE THE PREVIEWS NOW
           </Button>
         </a>
 
@@ -245,15 +245,15 @@ export default function PresellPage() {
         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-300">
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="bg-transparent text-white italic">Liberado agora. Mas só por pouco tempo.</span>
+            <span className="bg-transparent text-white italic">Released now. But only for a short time.</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white italic">Privado</span>
+            <span className="text-white italic">Private</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white italic">Prévias exclusivas para você</span>
+            <span className="text-white italic">Exclusive previews for you</span>
           </div>
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function PresellPage() {
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
         <div className="text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1 bg-[rgba(255,0,0,1)]">
           <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
-          ÚLTIMAS VAGAS DO GRUPO
+          LAST SPOTS AVAILABLE
         </div>
       </div>
     </div>
