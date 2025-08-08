@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Users, Star, Check, AlertTriangle } from 'lucide-react'
+import { MessageCircle, Users, Star, Check, AlertTriangle, Instagram } from 'lucide-react'
 import { Montserrat } from 'next/font/google'
 import { useState, useEffect } from "react"
 
@@ -107,6 +107,13 @@ export default function PresellPage() {
     // Track Meta Pixel event when button is clicked
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "Lead")
+    }
+  }
+
+  const handleInstagramClick = () => {
+    // Track Meta Pixel event when Instagram button is clicked
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Lead", { source: "instagram" })
     }
   }
 
@@ -229,7 +236,7 @@ export default function PresellPage() {
         >
           <Button
             size="lg"
-            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4 border-2 border-[#66c2ff]"
+            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-3 border-2 border-[#66c2ff]"
             style={{
               filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
               boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
@@ -238,6 +245,27 @@ export default function PresellPage() {
           >
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
             I WANT TO SEE NOW
+          </Button>
+        </a>
+
+        {/* Instagram CTA */}
+        <a
+          href="https://www.instagram.com/gemeas_scarlatt/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleInstagramClick}
+        >
+          <Button
+            size="lg"
+            className="w-full bg-gradient-to-r from-[#E4405F] to-[#C13584] hover:from-[#D62976] hover:to-[#962FBF] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4 border-2 border-[#F77737]"
+            style={{
+              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <Instagram className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
+            FOLLOW ON INSTAGRAM
           </Button>
         </a>
 
