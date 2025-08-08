@@ -222,7 +222,7 @@ export default function PresellPage() {
 
         {/* Main CTA */}
         <a
-          href="https://t.me/+pZ9uqWjcpflhY2Ix"
+          href="https://fansly.com/gemeasscarlatt/"
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleTelegramClick}
