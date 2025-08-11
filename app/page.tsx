@@ -203,7 +203,7 @@ export default function PresellPage() {
 
         {/* Instagram Button */}
         <a
-          href="https://instagram.com/gemeasscarlatt"
+          href="https://instagram.com/gemeas_scarlatt"
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleInstagramClick}
