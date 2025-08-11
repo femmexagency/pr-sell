@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Users, Star, Check, AlertTriangle, Instagram } from 'lucide-react'
-import { Montserrat } from 'next/font/google'
+import { MessageCircle, Users, Star, Check, AlertTriangle, Instagram } from "lucide-react"
+import { Montserrat } from "next/font/google"
 import { useState, useEffect } from "react"
 
 const montserrat = Montserrat({
@@ -11,82 +11,37 @@ const montserrat = Montserrat({
   display: "swap",
 })
 
-const pulseKeyframes = `
-  @keyframes borderPulse {
-    0%, 100% {
-      border-color: #4ADE80;
-      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+// Proteções contra cópia simplificadas
+const useCopyProtection = () => {
+  useEffect(() => {
+    // Desabilitar clique direito
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+      return false
     }
-    50% {
-      border-color: #22c55e;
-      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0);
+
+    // Desabilitar seleção de texto
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault()
+      return false
     }
-  }
-`
+
+    // Adicionar event listeners
+    document.addEventListener("contextmenu", handleContextMenu)
+    document.addEventListener("selectstart", handleSelectStart)
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu)
+      document.removeEventListener("selectstart", handleSelectStart)
+    }
+  }, [])
+}
 
 export default function PresellPage() {
   const [userCount, setUserCount] = useState(1688)
 
-  // Proteções contra cópia
-  const useCopyProtection = () => {
-    useEffect(() => {
-      // Desabilitar clique direito
-      const handleContextMenu = (e: MouseEvent) => {
-        e.preventDefault()
-        return false
-      }
-
-      // Desabilitar teclas de desenvolvedor
-      const handleKeyDown = (e: KeyboardEvent) => {
-        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        if (
-          e.key === "F12" ||
-          (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-          (e.ctrlKey && e.key === "u")
-        ) {
-          e.preventDefault()
-          return false
-        }
-      }
-
-      // Desabilitar seleção de texto
-      const handleSelectStart = (e: Event) => {
-        e.preventDefault()
-        return false
-      }
-
-      // Desabilitar arrastar imagens
-      const handleDragStart = (e: DragEvent) => {
-        e.preventDefault()
-        return false
-      }
-
-      // Adicionar event listeners
-      document.addEventListener("contextmenu", handleContextMenu)
-      document.addEventListener("keydown", handleKeyDown)
-      document.addEventListener("selectstart", handleSelectStart)
-      document.addEventListener("dragstart", handleDragStart)
-
-      // Cleanup
-      return () => {
-        document.removeEventListener("contextmenu", handleContextMenu)
-        document.removeEventListener("keydown", handleKeyDown)
-        document.removeEventListener("selectstart", handleSelectStart)
-        document.removeEventListener("dragstart", handleDragStart)
-      }
-    }, [])
-  }
-
   useCopyProtection()
-
-  useEffect(() => {
-    // Add pulse keyframes
-    if (typeof document !== "undefined") {
-      const style = document.createElement("style")
-      style.textContent = pulseKeyframes
-      document.head.appendChild(style)
-    }
-  }, [])
 
   useEffect(() => {
     const interval = setInterval(
@@ -113,20 +68,18 @@ export default function PresellPage() {
   const handleInstagramClick = () => {
     // Track Meta Pixel event when Instagram button is clicked
     if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "Lead", { source: "instagram" })
+      window.fbq("track", "Lead")
     }
   }
 
   return (
     <div
-      className={`min-h-screen w-full relative overflow-hidden flex items-center justify-center px-2 select-none ${montserrat.className}`}
+      className={`min-h-screen w-full relative overflow-hidden flex items-center justify-center px-2 ${montserrat.className}`}
       style={{
         minHeight: "100vh",
         width: "100vw",
         userSelect: "none",
         WebkitUserSelect: "none",
-        MozUserSelect: "none",
-        msUserSelect: "none",
       }}
     >
       {/* Background Image */}
@@ -151,23 +104,23 @@ export default function PresellPage() {
           className="text-xl sm:text-3xl font-bold text-white mb-6 leading-tight md:text-4xl uppercase"
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
         >
-          WHAT THEY DO{" "}
+          O QUE ELAS FAZEM{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{
               textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
             }}
           >
-            TOGETHER
+            JUNTAS
           </span>{" "}
-          NO ONE EXPECTS, CLICK AND{" "}
+          NINGUÉM ESPERA, CLIQUE E{" "}
           <span
             className="drop-shadow-lg text-[rgba(255,0,0,1)]"
             style={{
               textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
             }}
           >
-            DISCOVER
+            DESCUBRA
           </span>
           ...
         </h1>
@@ -194,7 +147,7 @@ export default function PresellPage() {
               style={{ textShadow: "1px 1px 2px rgba(255,255,255,0.5)" }}
             >
               <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
-              <span className="tracking-widest font-black">⚠️ RESTRICTED CONTENT ⚠️</span>
+              <span className="tracking-widest font-black">⚠️ CONTEÚDO RESTRITO ⚠️</span>
               <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
             </div>
           </div>
@@ -210,7 +163,7 @@ export default function PresellPage() {
                 <span className="font-black text-sm sm:text-base" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
                   {userCount}
                 </span>{" "}
-                <span className="font-semibold">Users</span>
+                <span className="font-semibold">Usuários</span>
               </span>
             </div>
           </div>
@@ -229,7 +182,7 @@ export default function PresellPage() {
 
         {/* Main CTA */}
         <a
-          href="https://fansly.com/gemeasscarlatt/"
+          href="https://t.me/+pZ9uqWjcpflhY2Ix"
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleTelegramClick}
@@ -244,13 +197,13 @@ export default function PresellPage() {
             }}
           >
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            I WANT TO SEE NOW
+            QUERO VER AS PRÉVIAS AGORA
           </Button>
         </a>
 
-        {/* Instagram CTA */}
+        {/* Instagram Button */}
         <a
-          href="https://www.instagram.com/gemeas_scarlatt/"
+          href="https://instagram.com/gemeasscarlatt"
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleInstagramClick}
@@ -265,7 +218,7 @@ export default function PresellPage() {
             }}
           >
             <Instagram className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            FOLLOW ON INSTAGRAM
+            SIGA NO INSTAGRAM
           </Button>
         </a>
 
@@ -273,11 +226,15 @@ export default function PresellPage() {
         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-300">
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="bg-transparent text-white italic">Released now. But only for a short time.</span>
+            <span className="bg-transparent text-white italic">Liberado agora. Mas só por pouco tempo.</span>
           </div>
           <div className="flex items-center gap-1">
             <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white italic">Private</span>
+            <span className="text-white italic">Privado</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
+            <span className="text-white italic">Prévias exclusivas para você</span>
           </div>
         </div>
       </div>
@@ -286,7 +243,7 @@ export default function PresellPage() {
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
         <div className="text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1 bg-[rgba(255,0,0,1)]">
           <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
-          LAST SPOTS AVAILABLE
+          ÚLTIMAS VAGAS DO GRUPO
         </div>
       </div>
     </div>
