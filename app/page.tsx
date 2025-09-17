@@ -54,7 +54,7 @@ export default function PresellPage() {
               <img
                 src="/images/profile-gemeas-final.jpg"
                 alt="Gêmeas Scarlatt"
-                className="w-24 h-24 rounded-full mx-auto border-4 border-yellow-400 object-cover shadow-lg"
+                className="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover shadow-lg"
               />
             </div>
 
@@ -70,16 +70,16 @@ export default function PresellPage() {
 
           {/* Stats */}
           <div className="flex justify-center items-center gap-4 mb-6">
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-yellow-400/30">
+            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-yellow-400" />
-                <span className="text-sm font-bold">{userCount.toLocaleString()}</span>
+                <Users className="w-4 h-4 text-white" />
+                <span className="text-sm font-bold">{userCount.toLocaleString()} Assinantes</span>
               </div>
             </div>
 
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-yellow-400/30">
+            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
               <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-yellow-400" />
+                <Eye className="w-4 h-4 text-white" />
                 <span className="text-sm font-bold">{viewCount.toLocaleString()}</span>
               </div>
             </div>
@@ -111,9 +111,11 @@ export default function PresellPage() {
               }}
               onClick={handlePrivacyClick}
             >
-              <div className="flex items-center justify-center w-full">
-                <span className="text-center w-full">PRIVACY (40% OFF)</span>
-              </div>
+              <a href="https://privacy.com.br/profile/gemeasscarlatt" target="_blank" rel="noopener noreferrer">
+                <div className="flex items-center justify-center w-full">
+                  <span className="text-center w-full">PRIVACY (40% OFF)</span>
+                </div>
+              </a>
             </div>
           </div>
         </div>
