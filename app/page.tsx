@@ -1,258 +1,141 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { MessageCircle, Users, Star, Check, AlertTriangle, Instagram } from "lucide-react"
-import { Montserrat } from "next/font/google"
 import { useState, useEffect } from "react"
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["700", "900"],
-  display: "swap",
-})
-
-// Proteções contra cópia simplificadas
-const useCopyProtection = () => {
-  useEffect(() => {
-    // Desabilitar clique direito
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault()
-      return false
-    }
-
-    // Desabilitar seleção de texto
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault()
-      return false
-    }
-
-    // Adicionar event listeners
-    document.addEventListener("contextmenu", handleContextMenu)
-    document.addEventListener("selectstart", handleSelectStart)
-
-    // Cleanup
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu)
-      document.removeEventListener("selectstart", handleSelectStart)
-    }
-  }, [])
-}
+import { Button } from "@/components/ui/button"
+import { Users, Eye } from "lucide-react"
 
 export default function PresellPage() {
-  const [userCount, setUserCount] = useState(1688)
-
-  useCopyProtection()
+  const [userCount, setUserCount] = useState(1247)
+  const [viewCount, setViewCount] = useState(3891)
 
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        setUserCount((prev) => {
-          // Simula incrementos realistas entre 1-3 usuários a cada 3-8 segundos
-          const increment = Math.floor(Math.random() * 3) + 1
-          return prev + increment
-        })
-      },
-      Math.random() * 5000 + 3000,
-    ) // Entre 3-8 segundos
+    const interval = setInterval(() => {
+      setUserCount((prev) => prev + Math.floor(Math.random() * 3))
+      setViewCount((prev) => prev + Math.floor(Math.random() * 5))
+    }, 3000)
 
     return () => clearInterval(interval)
   }, [])
 
   const handleTelegramClick = () => {
-    // Track Meta Pixel event when button is clicked
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "Lead")
     }
   }
 
-  const handleInstagramClick = () => {
-    // Track Meta Pixel event when Instagram button is clicked
+  const handlePrivacyClick = () => {
     if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "Lead")
+      window.fbq("track", "ViewContent")
     }
   }
 
   return (
-    <div
-      className={`min-h-screen w-full relative overflow-hidden flex items-center justify-center px-2 ${montserrat.className}`}
-      style={{
-        minHeight: "100vh",
-        width: "100vw",
-        userSelect: "none",
-        WebkitUserSelect: "none",
-      }}
-    >
-      {/* Background Image */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background Image with Blur */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://i.postimg.cc/rpt9nM4F/Quality-Restoration-Ultra-HD-Captura-de-Tela-2025-07-29-a-s-19-19-49.jpg')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-          width: "100vw",
-          height: "100vh",
+          backgroundImage: "url(https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg)",
+          filter: "blur(2px)",
+          transform: "scale(1.1)",
         }}
-      >
-        {/* Black Gradient with Backdrop Blur */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent backdrop-blur-sm" />
-      </div>
+      />
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/60" />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-lg w-full">
-        {/* Main Headline */}
-        <h1
-          className="text-xl sm:text-3xl font-bold text-white mb-6 leading-tight md:text-4xl uppercase"
-          style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)" }}
-        >
-          O QUE ELAS FAZEM{" "}
-          <span
-            className="drop-shadow-lg text-[rgba(255,0,0,1)]"
-            style={{
-              textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
-            }}
-          >
-            JUNTAS
-          </span>{" "}
-          NINGUÉM ESPERA, CLIQUE E{" "}
-          <span
-            className="drop-shadow-lg text-[rgba(255,0,0,1)]"
-            style={{
-              textShadow: "2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6), 0 0 20px rgba(255,0,0,0.8)",
-            }}
-          >
-            DESCUBRA
-          </span>
-          ...
-        </h1>
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md mx-auto text-center space-y-6">
+          {/* Profile Section */}
+          <div className="space-y-4">
+            {/* Profile Image */}
+            <div className="relative">
+              <img
+                src="/images/profile-gemeas-final.jpg"
+                alt="Gêmeas Scarlatt"
+                className="w-24 h-24 rounded-full mx-auto border-4 border-yellow-400 object-cover shadow-lg"
+              />
+            </div>
 
-        {/* Image below headline */}
-        <div className="mb-3 sm:mb-4 relative">
-          <img
-            src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
-            alt="Design"
-            className="mx-auto max-w-full h-auto"
-            style={{
-              filter: "blur(1px)",
-              maxWidth: "300px",
-              width: "100%",
-            }}
-          />
-          {/* Watermark */}
-          <div
-            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[90%] h-[10%] bg-gradient-to-r from-yellow-400 to-yellow-300 flex items-center justify-center backdrop-blur-sm border-t-2 border-b-2 border-black"
-            style={{ transform: "translateX(-50%) rotate(-1deg)" }}
-          >
-            <div
-              className="flex items-center gap-2 text-black text-xs font-bold uppercase"
-              style={{ textShadow: "1px 1px 2px rgba(255,255,255,0.5)" }}
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-white text-balance">
+                VEM CONHECER NOSSO LADO{" "}
+                <span className="text-red-400 font-bold inline-flex items-center gap-1">
+                  <img src="https://img.icons8.com/color/24/000000/18-plus.png" alt="+18" className="w-6 h-6" />
+                </span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="flex justify-center items-center gap-4 mb-6">
+            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-yellow-400/30">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm font-bold">{userCount.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-yellow-400/30">
+              <div className="flex items-center gap-2">
+                <Eye className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm font-bold">{viewCount.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="space-y-4">
+            {/* Telegram Button */}
+            <Button
+              asChild
+              className="w-full bg-[#0088cc] hover:bg-[#006699] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-white/20 backdrop-blur-sm min-h-[60px]"
+              onClick={handleTelegramClick}
             >
-              <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
-              <span className="tracking-widest font-black">⚠️ CONTEÚDO RESTRITO ⚠️</span>
-              <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
+              <a href="https://t.me/gemeasscarlatt" target="_blank" rel="noopener noreferrer">
+                <div className="flex items-center justify-center w-full">
+                  <span className="text-center w-full">TELEGRAM VIP (40% OFF)</span>
+                </div>
+              </a>
+            </Button>
+
+            {/* Privacy Button */}
+            <div
+              className="w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 backdrop-blur-sm cursor-pointer font-bold min-h-[60px]"
+              style={{
+                background: "white",
+                color: "#FB923C",
+                borderColor: "#FDBA74",
+                boxShadow: "0 0 0 1px #FDBA74, 0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              }}
+              onClick={handlePrivacyClick}
+            >
+              <div className="flex items-center justify-center w-full">
+                <span className="text-center w-full">PRIVACY (40% OFF)</span>
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="flex flex-row justify-center items-center gap-1 sm:gap-2 mb-2 sm:mb-3">
-          {/* User Count - Custom Badge Style */}
-          <div className="bg-gradient-to-r from-[#ff0000] to-[#be0000] text-white px-1.5 py-0.5 rounded-full shadow-lg border-2 border-white/20">
-            <div className="flex items-center gap-2">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-              <span className="text-[10px] sm:text-xs font-bold">
-                <span className="font-black text-sm sm:text-base" style={{ fontFamily: "Montserrat", fontWeight: 900 }}>
-                  {userCount}
-                </span>{" "}
-                <span className="font-semibold">Usuários</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Rating - Custom Card Style */}
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-400 text-black px-1.5 py-0.5 rounded-full shadow-lg border-2 border-white/30">
-            <div className="flex items-center gap-2">
-              <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-black text-black" />
-              <span className="font-black text-[10px] sm:text-xs">
-                <span className="text-sm sm:text-base">4.9</span>
-                <span className="text-[10px] sm:text-xs font-bold">/5</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Main CTA */}
-        <a
-          href="https://t.me/+pZ9uqWjcpflhY2Ix"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleTelegramClick}
-        >
-          <Button
-            size="lg"
-            className="w-full bg-gradient-to-r from-[#0088cc] to-[#229ED9] hover:from-[#006699] hover:to-[#0088cc] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-3 border-2 border-[#66c2ff]"
-            style={{
-              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            QUERO VER AS PRÉVIAS AGORA
-          </Button>
-        </a>
-
-        {/* Instagram Button */}
-        <a
-          href="https://instagram.com/gemeas_scarlatt"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleInstagramClick}
-        >
-          <Button
-            size="lg"
-            className="w-full bg-gradient-to-r from-[#E4405F] to-[#C13584] hover:from-[#D62976] hover:to-[#962FBF] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 text-sm sm:text-base shadow-2xl transform hover:scale-105 transition-all duration-200 mb-4 border-2 border-[#F77737]"
-            style={{
-              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.3)",
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <Instagram className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
-            SIGA NO INSTAGRAM
-          </Button>
-        </a>
-
-        {/* Trust Signals */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-300">
-          <div className="flex items-center gap-1">
-            <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="bg-transparent text-white italic">Liberado agora. Mas só por pouco tempo.</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white italic">Privado</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-            <span className="text-white italic">Prévias exclusivas para você</span>
           </div>
         </div>
       </div>
 
-      {/* Live Indicator */}
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-        <div className="text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1 bg-[rgba(255,0,0,1)]">
-          <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
-          ÚLTIMAS VAGAS DO GRUPO
-        </div>
-      </div>
+      {/* Meta Pixel Code */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', 'YOUR_PIXEL_ID');
+            fbq('track', 'PageView');
+          `,
+        }}
+      />
     </div>
   )
-}
-
-// Extend Window interface for TypeScript
-declare global {
-  interface Window {
-    fbq: any
-  }
 }
