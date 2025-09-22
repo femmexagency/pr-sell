@@ -8,6 +8,10 @@ export default function PresellPage() {
   const [userCount, setUserCount] = useState(1247)
   const [viewCount, setViewCount] = useState(3891)
 
+  const FB_ACCESS_TOKEN =
+    "EAAJ6bVYk96kBPtG7OmkBoNHaw6HN1EB5BlLeFp51NAskuyxWFIV86Qqho64mwlfcNYVH6fWHRPZBL6boFtY5TTTZA3H15y3GIxZCEuvC8wBtZCyi6hvWVwPPjZA9rXlLFqr97VbCPZCfXzmF8xKzrVk7ncXm0U111ZCvYziOaU7yFWyp0TZB2ebNgKQZCMA9zWQZDZD"
+  const PIXEL_ID = "2057231185018157"
+
   useEffect(() => {
     const interval = setInterval(() => {
       setUserCount((prev) => prev + Math.floor(Math.random() * 3))
@@ -17,16 +21,50 @@ export default function PresellPage() {
     return () => clearInterval(interval)
   }, [])
 
+  const sendConversionEvent = async (eventName: string, eventSourceUrl: string) => {
+    try {
+      const eventData = {
+        data: [
+          {
+            event_name: eventName,
+            event_time: Math.floor(Date.now() / 1000),
+            event_source_url: eventSourceUrl,
+            action_source: "website",
+            user_data: {
+              client_ip_address: "{{client_ip_address}}",
+              client_user_agent: navigator.userAgent,
+              fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || "",
+              fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || "",
+            },
+          },
+        ],
+        access_token: FB_ACCESS_TOKEN,
+      }
+
+      await fetch(`https://graph.facebook.com/v18.0/${PIXEL_ID}/events`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventData),
+      })
+    } catch (error) {
+      console.error("Error sending conversion event:", error)
+    }
+  }
+
   const handleTelegramClick = () => {
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "Lead")
     }
+    sendConversionEvent("Lead", window.location.href)
   }
 
   const handlePrivacyClick = () => {
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "ViewContent")
     }
+    sendConversionEvent("ViewContent", window.location.href)
   }
 
   return (
@@ -133,7 +171,7 @@ export default function PresellPage() {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'YOUR_PIXEL_ID');
+            fbq('init', '2057231185018157');
             fbq('track', 'PageView');
           `,
         }}
