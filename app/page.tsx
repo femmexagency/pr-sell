@@ -133,7 +133,7 @@ export default function PresellPage() {
             >
               <a href="https://t.me/asgemeasvip" target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center justify-center w-full">
-                  <span className="text-center w-full">TELEGRAM VIP (40% OFF)</span>
+                  <span className="text-center w-full">TELEGRAM +18</span>
                 </div>
               </a>
             </Button>
