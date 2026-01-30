@@ -103,6 +103,7 @@ export default function PresellPage() {
                   <img src="https://img.icons8.com/color/24/000000/18-plus.png" alt="+18" className="w-6 h-6" />
                 </span>
               </h1>
+              <p className="text-gray-300 font-bold text-sm">Chame para conteudos completos</p>
             </div>
           </div>
 
