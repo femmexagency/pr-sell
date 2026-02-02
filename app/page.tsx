@@ -125,19 +125,6 @@ export default function PresellPage() {
 
           {/* Buttons */}
           <div className="space-y-4">
-            {/* Telegram Button */}
-            <Button
-              asChild
-              className="w-full bg-[#0088cc] hover:bg-[#006699] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-white/20 backdrop-blur-sm min-h-[60px]"
-              onClick={handleTelegramClick}
-            >
-              <a href="https://t.me/vipgemeasscarlattbot?start=vip" target="_blank" rel="noopener noreferrer">
-                <div className="flex items-center justify-center w-full">
-                  <span className="text-center w-full">TELEGRAM VIP (40% OFF)</span>
-                </div>
-              </a>
-            </Button>
-
             {/* Privacy Button */}
             <div
               className="w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 backdrop-blur-sm cursor-pointer font-bold min-h-[60px]"
