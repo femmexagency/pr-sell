@@ -103,7 +103,6 @@ export default function PresellPage() {
                   <img src="https://img.icons8.com/color/24/000000/18-plus.png" alt="+18" className="w-6 h-6" />
                 </span>
               </h1>
-              <p className="text-gray-300 font-bold text-sm">Chame para conteudos completos</p>
             </div>
           </div>
 
@@ -132,12 +131,30 @@ export default function PresellPage() {
               className="w-full bg-[#0088cc] hover:bg-[#006699] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-white/20 backdrop-blur-sm min-h-[60px]"
               onClick={handleTelegramClick}
             >
-              <a href="https://t.me/asgemeasvip" target="_blank" rel="noopener noreferrer">
+              <a href="https://t.me/vipgemeasscarlattbot?start=vip" target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center justify-center w-full">
-                  <span className="text-center w-full">TELEGRAM +18</span>
+                  <span className="text-center w-full">TELEGRAM VIP (40% OFF)</span>
                 </div>
               </a>
             </Button>
+
+            {/* Privacy Button */}
+            <div
+              className="w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 backdrop-blur-sm cursor-pointer font-bold min-h-[60px]"
+              style={{
+                background: "white",
+                color: "#FB923C",
+                borderColor: "#FDBA74",
+                boxShadow: "0 0 0 1px #FDBA74, 0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              }}
+              onClick={handlePrivacyClick}
+            >
+              <a href="https://privacy.com.br/profile/gemeasscarlatt" target="_blank" rel="noopener noreferrer">
+                <div className="flex items-center justify-center w-full">
+                  <span className="text-center w-full">PRIVACY (40% OFF)</span>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
