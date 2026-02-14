@@ -112,8 +112,8 @@ export default function ProfilePage() {
               >
                 <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"1 m\u00eas"}</span>
                 <span className="text-gray-800 text-sm flex items-center gap-1.5">
-                  <span className="line-through text-gray-500" style={{ fontWeight: 400 }}>R$ 49,90</span>
-                  <span style={{ fontWeight: 600 }}>R$ 17,00</span>
+                  <span className="line-through text-foreground" style={{ fontWeight: 400 }}>R$ 49,90</span>
+                  <span className="font-bold" style={{ fontWeight: 600 }}>R$ 17,00</span>
                 </span>
               </button>
             </div>
