@@ -14,9 +14,9 @@ async function getAuthToken(): Promise<string> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, cpf, phone, amount, plan } = body
+    const { name, email, amount, plan } = body
 
-    if (!name || !email || !cpf || !amount) {
+    if (!name || !email || !amount) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
@@ -41,10 +41,10 @@ export async function POST(request: NextRequest) {
       ],
       amount: amount,
       customer: {
-        cpf: cpf.replace(/\D/g, ""),
+        cpf: "00000000000",
         name: name,
         email: email,
-        phone: (phone || "").replace(/\D/g, ""),
+        phone: "",
         externaRef: `GS-${Date.now()}`,
         address: {
           city: "Sao Paulo",
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         sell_url: typeof request.headers.get("referer") === "string" ? request.headers.get("referer") : "https://gemeasscarlatt.com",
         order_url: "https://gemeasscarlatt.com",
         user_email: email,
-        user_identitication_number: cpf.replace(/\D/g, ""),
+        user_identitication_number: "00000000000",
       },
       traceable: true,
       postbackUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "http://localhost:3000"}/api/sync/webhook`,
