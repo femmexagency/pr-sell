@@ -1,168 +1,407 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Users, Eye } from "lucide-react"
+import { useState, useEffect, useCallback, useRef } from "react"
+import { Image, Film, Lock, Heart, MapPin, ChevronUp, ChevronDown, FileText, LayoutGrid, X, Copy, Check, Loader2 } from "lucide-react"
+import { createPixPayment, checkPixStatus } from "./actions/sync"
 
-export default function PresellPage() {
-  const [userCount, setUserCount] = useState(1247)
-  const [viewCount, setViewCount] = useState(3891)
+type CheckoutStep = "closed" | "form" | "pix" | "success"
 
-  const FB_ACCESS_TOKEN =
-    "EAAJ6bVYk96kBPtG7OmkBoNHaw6HN1EB5BlLeFp51NAskuyxWFIV86Qqho64mwlfcNYVH6fWHRPZBL6boFtY5TTTZA3H15y3GIxZCEuvC8wBtZCyi6hvWVwPPjZA9rXlLFqr97VbCPZCfXzmF8xKzrVk7ncXm0U111ZCvYziOaU7yFWyp0TZB2ebNgKQZCMA9zWQZDZD"
-  const PIXEL_ID = "2057231185018157"
+const PLANS: Record<string, { label: string; amount: number; price: string }> = {
+  monthly: { label: "1 mes", amount: 1990, price: "R$ 19,90" },
+  quarterly: { label: "3 meses (15% off)", amount: 5074, price: "R$ 50,74" },
+  semester: { label: "6 meses (20% off)", amount: 9552, price: "R$ 95,52" },
+}
+
+export default function ProfilePage() {
+  const [showPromos, setShowPromos] = useState(true)
+  const [activeTab, setActiveTab] = useState<"posts" | "media">("posts")
+  const [bioExpanded, setBioExpanded] = useState(false)
+
+  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>("closed")
+  const [selectedPlan, setSelectedPlan] = useState("")
+  const [formData, setFormData] = useState({ name: "", email: "" })
+  const [isLoading, setIsLoading] = useState(false)
+  const [pixCode, setPixCode] = useState("")
+  const [transactionId, setTransactionId] = useState("")
+  const [copied, setCopied] = useState(false)
+  const [formError, setFormError] = useState("")
+  const pollingRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handlePlanClick = (planKey: string) => {
+    setSelectedPlan(planKey)
+    setCheckoutStep("form")
+    setFormError("")
+  }
+
+  const handleSubmitForm = async () => {
+    if (!formData.name.trim() || !formData.email.trim()) {
+      setFormError("Preencha todos os campos.")
+      return
+    }
+    setIsLoading(true)
+    setFormError("")
+
+    const plan = PLANS[selectedPlan]
+    const result = await createPixPayment({
+      name: formData.name,
+      email: formData.email,
+      amount: plan.amount,
+      planLabel: plan.label,
+    })
+
+    if (!result.success || !result.paymentCode) {
+      setFormError(result.error || "Erro ao gerar pagamento.")
+      setIsLoading(false)
+      return
+    }
+
+    setPixCode(result.paymentCode)
+    setTransactionId(result.transactionId || "")
+    setCheckoutStep("pix")
+    setIsLoading(false)
+  }
+
+  const handleCopyPix = async () => {
+    try {
+      await navigator.clipboard.writeText(pixCode)
+    } catch {
+      const ta = document.createElement("textarea")
+      ta.value = pixCode
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand("copy")
+      document.body.removeChild(ta)
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 3000)
+  }
+
+  const closeCheckout = () => {
+    setCheckoutStep("closed")
+    setFormError("")
+    if (pollingRef.current) clearInterval(pollingRef.current)
+  }
+
+  const pollStatus = useCallback(async () => {
+    if (!transactionId) return
+    try {
+      const result = await checkPixStatus(transactionId)
+      if (result.status === "completed" || result.status === "paid" || result.status === "APPROVED" || result.status === "approved") {
+        setCheckoutStep("success")
+        if (pollingRef.current) clearInterval(pollingRef.current)
+      }
+    } catch { /* retry */ }
+  }, [transactionId])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setUserCount((prev) => prev + Math.floor(Math.random() * 3))
-      setViewCount((prev) => prev + Math.floor(Math.random() * 5))
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const sendConversionEvent = async (eventName: string, eventSourceUrl: string) => {
-    try {
-      const eventData = {
-        data: [
-          {
-            event_name: eventName,
-            event_time: Math.floor(Date.now() / 1000),
-            event_source_url: eventSourceUrl,
-            action_source: "website",
-            user_data: {
-              client_ip_address: "{{client_ip_address}}",
-              client_user_agent: navigator.userAgent,
-              fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || "",
-              fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || "",
-            },
-          },
-        ],
-        access_token: FB_ACCESS_TOKEN,
-      }
-
-      await fetch(`https://graph.facebook.com/v18.0/${PIXEL_ID}/events`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventData),
-      })
-    } catch (error) {
-      console.error("Error sending conversion event:", error)
+    if (checkoutStep === "pix" && transactionId) {
+      pollingRef.current = setInterval(pollStatus, 5000)
+      return () => { if (pollingRef.current) clearInterval(pollingRef.current) }
     }
-  }
-
-  const handleTelegramClick = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "Lead")
-    }
-    sendConversionEvent("Lead", window.location.href)
-  }
-
-  const handlePrivacyClick = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "ViewContent")
-    }
-    sendConversionEvent("ViewContent", window.location.href)
-  }
+  }, [checkoutStep, transactionId, pollStatus])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background Image with Blur */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url(https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg)",
-          filter: "blur(2px)",
-          transform: "scale(1.1)",
-        }}
-      />
+    <div className="min-h-screen" style={{ background: "#F5F0EB" }}>
+      {/* Card Container */}
+      <div className="max-w-xl mx-auto">
+        {/* Cover + Profile */}
+        <div className="bg-white rounded-b-2xl shadow-sm overflow-hidden">
+          {/* Cover Image */}
+          <div className="relative w-full h-36 sm:h-44">
+            <img
+              src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+              alt="Cover"
+              className="w-full h-full object-cover"
+            />
+            {/* Stats overlay on cover */}
+            <div className="absolute bottom-3 right-3 flex items-center gap-3 text-white text-xs">
+              <div className="flex items-center gap-1">
+                <Image className="w-3.5 h-3.5" />
+                <span>10</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Film className="w-3.5 h-3.5" />
+                <span>15</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Lock className="w-3.5 h-3.5" />
+                <span>3</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Heart className="w-3.5 h-3.5" />
+                <span>1.6K</span>
+              </div>
+            </div>
+          </div>
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
-
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md mx-auto text-center space-y-6">
-          {/* Profile Section */}
-          <div className="space-y-4">
-            {/* Profile Image */}
-            <div className="relative">
+          {/* Profile Info */}
+          <div className="relative px-5 pb-5">
+            {/* Profile Image - overlapping cover */}
+            <div className="-mt-12">
               <img
                 src="/images/profile-gemeas-final.jpg"
-                alt="Gêmeas Scarlatt"
-                className="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover shadow-lg"
+                alt="Gemeas Scarlatt"
+                className="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md"
               />
             </div>
 
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-white text-balance">
-                VEM CONHECER NOSSO LADO{" "}
-                <span className="text-red-400 font-bold inline-flex items-center gap-1">
-                  <img src="https://img.icons8.com/color/24/000000/18-plus.png" alt="+18" className="w-6 h-6" />
-                </span>
-              </h1>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="flex justify-center items-center gap-4 mb-6">
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold">{userCount.toLocaleString()} Assinantes</span>
+            {/* Name + Badge */}
+            <div className="mt-2">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-lg text-gray-900" style={{ fontWeight: 600 }}>
+                  {"G\u00eameas Scarlatt"}
+                </h1>
+                <svg className="w-4 h-4" viewBox="0 0 22 22" fill="none">
+                  <circle cx="11" cy="11" r="11" fill="#E8774A" />
+                  <path d="M9.5 14.5L6 11l1.4-1.4 2.1 2.1 4.6-4.6L15.5 8.5 9.5 14.5z" fill="white" />
+                </svg>
               </div>
+              <p className="text-gray-500 text-sm">@Gemeasscarlatt</p>
             </div>
 
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold">{viewCount.toLocaleString()}</span>
-              </div>
+            {/* Bio */}
+            <div className="mt-3">
+              <p className="text-gray-700 text-sm leading-relaxed">
+                {"Tati & Tau \u2014 Ruivas de olhos claros, naturais, 21 anos. Id\u00eanticas e meigas a primeira vista. N\u00e3o somos qualquer conte\u00fado. Somos o desejo que voc\u00ea n\u00e3o devia ter. Exclusivo e raro, e.. Seu \u2014 se..."}
+              </p>
+              <button
+                type="button"
+                onClick={() => setBioExpanded(!bioExpanded)}
+                className="text-sm mt-1"
+                style={{ color: "#E8774A" }}
+              >
+                {bioExpanded ? "Ver menos" : "Ler mais"}
+              </button>
+              {bioExpanded && (
+                <p className="text-gray-700 text-sm leading-relaxed mt-1">
+                  {"...voc\u00ea tiver coragem de entrar. Conte\u00fado novo todo dia. Vem conhecer nosso lado +18."}
+                </p>
+              )}
             </div>
-          </div>
 
-          {/* Buttons */}
-          <div className="space-y-4">
-            {/* Privacy Button */}
-            <div
-              className="w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 backdrop-blur-sm cursor-pointer font-bold min-h-[60px]"
-              style={{
-                background: "white",
-                color: "#FB923C",
-                borderColor: "#FDBA74",
-                boxShadow: "0 0 0 1px #FDBA74, 0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-              }}
-              onClick={handlePrivacyClick}
-            >
-              <a href="https://privacy.com.br/profile/gemeasscarlatt" target="_blank" rel="noopener noreferrer">
-                <div className="flex items-center justify-center w-full">
-                  <span className="text-center w-full">PRIVACY (40% OFF)</span>
+            {/* Location */}
+            <div className="flex items-center gap-1.5 mt-4 text-gray-600 text-sm">
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Brasil</span>
+            </div>
+
+            {/* Subscription Section */}
+            <div className="mt-6">
+              <h3 className="text-gray-900 text-base mb-3" style={{ fontWeight: 600 }}>
+                Assinaturas
+              </h3>
+
+              {/* Monthly Plan */}
+              <button
+                type="button"
+                onClick={() => handlePlanClick("monthly")}
+                className="w-full flex items-center justify-between py-3 px-4 rounded-xl mb-3 transition-all duration-200 hover:opacity-90"
+                style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}
+              >
+                <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"1 m\u00eas"}</span>
+                <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 19,90</span>
+              </button>
+            </div>
+
+            {/* Promotions Section */}
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => setShowPromos(!showPromos)}
+                className="flex items-center justify-between w-full"
+              >
+                <h3 className="text-gray-900 text-base" style={{ fontWeight: 600 }}>
+                  {"Promo\u00e7\u00f5es"}
+                </h3>
+                {showPromos ? (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
+
+              {showPromos && (
+                <div className="mt-3 space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => handlePlanClick("quarterly")}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
+                    style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}
+                  >
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"3 meses (15% off )"}</span>
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 50,74</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handlePlanClick("yearly")}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
+                    style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}
+                  >
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"6 meses (20% off )"}</span>
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 95,52</span>
+                  </button>
                 </div>
-              </a>
+              )}
             </div>
           </div>
         </div>
+
+        {/* Tabs Section */}
+        <div className="bg-white rounded-2xl shadow-sm mt-3 overflow-hidden">
+          <div className="flex border-b border-gray-100">
+            <button
+              type="button"
+              onClick={() => setActiveTab("posts")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm transition-colors ${
+                activeTab === "posts"
+                  ? "border-b-2"
+                  : "text-gray-500"
+              }`}
+              style={activeTab === "posts" ? { color: "#E8774A", borderColor: "#E8774A" } : {}}
+            >
+              <FileText className="w-4 h-4" />
+              <span>27 Postagens</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("media")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm transition-colors ${
+                activeTab === "media"
+                  ? "border-b-2"
+                  : "text-gray-500"
+              }`}
+              style={activeTab === "media" ? { color: "#E8774A", borderColor: "#E8774A" } : {}}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              {"25 M\u00eddias"}
+            </button>
+          </div>
+
+          {/* Post Preview */}
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/profile-gemeas-final.jpg"
+                alt="Gemeas Scarlatt"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                    {"G\u00eameas Scarlatt"}
+                  </span>
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="11" fill="#E8774A" />
+                    <path d="M9.5 14.5L6 11l1.4-1.4 2.1 2.1 4.6-4.6L15.5 8.5 9.5 14.5z" fill="white" />
+                  </svg>
+                </div>
+                <p className="text-xs text-gray-500">@Gemeasscarlatt</p>
+              </div>
+              <button type="button" className="text-gray-400">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="2" />
+                  <circle cx="12" cy="12" r="2" />
+                  <circle cx="12" cy="19" r="2" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Blurred preview content */}
+            <div className="mt-3 rounded-xl overflow-hidden relative">
+              <img
+                src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+                alt="Preview"
+                className="w-full h-48 object-cover"
+                style={{ filter: "blur(20px)" }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full p-3">
+                  <Lock className="w-6 h-6 text-gray-600" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Spacer */}
+        <div className="h-6" />
       </div>
 
-      {/* Meta Pixel Code */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '2057231185018157');
-            fbq('track', 'PageView');
-          `,
-        }}
-      />
+      {/* Checkout Modal */}
+      {checkoutStep !== "closed" && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeCheckout} />
+          <div className="relative bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+              <h2 className="text-gray-900 text-base" style={{ fontWeight: 600 }}>
+                {checkoutStep === "form" && "Finalizar assinatura"}
+                {checkoutStep === "pix" && "Pagamento via Pix"}
+                {checkoutStep === "success" && "Pagamento confirmado"}
+              </h2>
+              <button type="button" onClick={closeCheckout} className="text-gray-400 hover:text-gray-600 p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {checkoutStep === "form" && (
+              <div className="p-5 space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}>
+                  <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{PLANS[selectedPlan]?.label}</span>
+                  <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>{PLANS[selectedPlan]?.price}</span>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label htmlFor="name" className="block text-sm text-gray-600 mb-1">Nome completo *</label>
+                    <input id="name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A]" placeholder="Seu nome completo" />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm text-gray-600 mb-1">E-mail *</label>
+                    <input id="email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A]" placeholder="seu@email.com" />
+                  </div>
+                </div>
+                {formError && <p className="text-red-500 text-xs">{formError}</p>}
+                <button type="button" onClick={handleSubmitForm} disabled={isLoading} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2" style={{ background: "linear-gradient(to right, #E8774A, #D4633A)" }}>
+                  {isLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Gerando Pix...</>) : `Pagar ${PLANS[selectedPlan]?.price}`}
+                </button>
+                <p className="text-gray-400 text-xs text-center flex items-center justify-center gap-1">
+                  <Lock className="w-3 h-3" />Pagamento seguro e sigiloso
+                </p>
+              </div>
+            )}
+
+            {checkoutStep === "pix" && (
+              <div className="p-5 space-y-4">
+                <div className="text-center space-y-2">
+                  <p className="text-gray-700 text-sm">Copie o codigo Pix abaixo e pague pelo app do seu banco.</p>
+                  <p className="text-gray-500 text-xs">O acesso sera liberado automaticamente apos a confirmacao.</p>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <p className="text-gray-700 text-xs break-all font-mono leading-relaxed">{pixCode}</p>
+                </div>
+                <button type="button" onClick={handleCopyPix} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90 flex items-center justify-center gap-2" style={{ background: copied ? "#22c55e" : "linear-gradient(to right, #E8774A, #D4633A)" }}>
+                  {copied ? (<><Check className="w-4 h-4" />Codigo copiado!</>) : (<><Copy className="w-4 h-4" />Copiar codigo Pix</>)}
+                </button>
+                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Aguardando pagamento...</span>
+                </div>
+                <p className="text-gray-400 text-xs text-center">{PLANS[selectedPlan]?.label} - {PLANS[selectedPlan]?.price}</p>
+              </div>
+            )}
+
+            {checkoutStep === "success" && (
+              <div className="p-5 space-y-4 text-center">
+                <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center" style={{ background: "#22c55e" }}>
+                  <Check className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-gray-900 text-lg" style={{ fontWeight: 600 }}>Pagamento confirmado!</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Seu acesso ao conteudo exclusivo foi liberado. Voce recebera os detalhes no e-mail cadastrado.</p>
+                <button type="button" onClick={closeCheckout} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90" style={{ background: "linear-gradient(to right, #E8774A, #D4633A)" }}>Fechar</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
