@@ -31,7 +31,7 @@ export default function ProfilePage() {
   // Checkout state
   const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>("closed")
   const [selectedPlan, setSelectedPlan] = useState<string>("")
-  const [formData, setFormData] = useState({ name: "", email: "", cpf: "", phone: "" })
+  const [formData, setFormData] = useState({ name: "", email: "" })
   const [isLoading, setIsLoading] = useState(false)
   const [pixCode, setPixCode] = useState("")
   const [transactionId, setTransactionId] = useState("")
@@ -81,28 +81,9 @@ export default function ProfilePage() {
     setFormError("")
   }
 
-  const formatCPF = (value: string) => {
-    const digits = value.replace(/\D/g, "").slice(0, 11)
-    if (digits.length <= 3) return digits
-    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`
-    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`
-    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`
-  }
-
-  const formatPhone = (value: string) => {
-    const digits = value.replace(/\D/g, "").slice(0, 11)
-    if (digits.length <= 2) return digits
-    if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
-    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
-  }
-
   const handleSubmitForm = async () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.cpf.trim()) {
+    if (!formData.name.trim() || !formData.email.trim()) {
       setFormError("Preencha todos os campos obrigatorios.")
-      return
-    }
-    if (formData.cpf.replace(/\D/g, "").length !== 11) {
-      setFormError("CPF invalido.")
       return
     }
 
@@ -117,8 +98,6 @@ export default function ProfilePage() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          cpf: formData.cpf,
-          phone: formData.phone,
           amount: plan.amount,
           plan: plan.label,
         }),
@@ -496,30 +475,7 @@ export default function ProfilePage() {
                       placeholder="seu@email.com"
                     />
                   </div>
-                  <div>
-                    <label htmlFor="cpf" className="block text-sm text-gray-600 mb-1">CPF *</label>
-                    <input
-                      id="cpf"
-                      type="text"
-                      value={formData.cpf}
-                      onChange={(e) => setFormData({ ...formData, cpf: formatCPF(e.target.value) })}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A] transition-colors"
-                      placeholder="000.000.000-00"
-                      inputMode="numeric"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm text-gray-600 mb-1">Telefone</label>
-                    <input
-                      id="phone"
-                      type="text"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A] transition-colors"
-                      placeholder="(00) 00000-0000"
-                      inputMode="numeric"
-                    />
-                  </div>
+
                 </div>
 
                 {formError && (
