@@ -1,12 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Users, Eye } from "lucide-react"
+import { Users, Eye, Check, Lock, ChevronDown } from "lucide-react"
 
-export default function PresellPage() {
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void
+  }
+}
+
+export default function CheckoutPage() {
   const [userCount, setUserCount] = useState(1247)
-  const [viewCount, setViewCount] = useState(3891)
+  const [selectedPlan, setSelectedPlan] = useState<"monthly" | "quarterly" | "yearly">("monthly")
 
   const FB_ACCESS_TOKEN =
     "EAAJ6bVYk96kBPtG7OmkBoNHaw6HN1EB5BlLeFp51NAskuyxWFIV86Qqho64mwlfcNYVH6fWHRPZBL6boFtY5TTTZA3H15y3GIxZCEuvC8wBtZCyi6hvWVwPPjZA9rXlLFqr97VbCPZCfXzmF8xKzrVk7ncXm0U111ZCvYziOaU7yFWyp0TZB2ebNgKQZCMA9zWQZDZD"
@@ -15,23 +20,20 @@ export default function PresellPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setUserCount((prev) => prev + Math.floor(Math.random() * 3))
-      setViewCount((prev) => prev + Math.floor(Math.random() * 5))
-    }, 3000)
-
+    }, 4000)
     return () => clearInterval(interval)
   }, [])
 
-  const sendConversionEvent = async (eventName: string, eventSourceUrl: string) => {
+  const sendConversionEvent = async (eventName: string) => {
     try {
       const eventData = {
         data: [
           {
             event_name: eventName,
             event_time: Math.floor(Date.now() / 1000),
-            event_source_url: eventSourceUrl,
+            event_source_url: window.location.href,
             action_source: "website",
             user_data: {
-              client_ip_address: "{{client_ip_address}}",
               client_user_agent: navigator.userAgent,
               fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || "",
               fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || "",
@@ -40,12 +42,9 @@ export default function PresellPage() {
         ],
         access_token: FB_ACCESS_TOKEN,
       }
-
       await fetch(`https://graph.facebook.com/v18.0/${PIXEL_ID}/events`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
       })
     } catch (error) {
@@ -53,96 +52,241 @@ export default function PresellPage() {
     }
   }
 
-  const handleTelegramClick = () => {
+  const handleSubscribe = () => {
     if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "Lead")
+      window.fbq("track", "InitiateCheckout")
     }
-    sendConversionEvent("Lead", window.location.href)
+    sendConversionEvent("InitiateCheckout")
+    window.open("https://privacy.com.br/checkout/gemeasscarlatt", "_blank")
   }
 
-  const handlePrivacyClick = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "ViewContent")
-    }
-    sendConversionEvent("ViewContent", window.location.href)
+  const plans = {
+    monthly: { price: "29,90", original: "49,90", period: "/mes", discount: "40% OFF", savings: "" },
+    quarterly: { price: "24,90", original: "49,90", period: "/mes", discount: "50% OFF", savings: "Economize R$75" },
+    yearly: { price: "19,90", original: "49,90", period: "/mes", discount: "60% OFF", savings: "Economize R$360" },
   }
+
+  const currentPlan = plans[selectedPlan]
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background Image with Blur */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url(https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg)",
-          filter: "blur(2px)",
-          transform: "scale(1.1)",
-        }}
-      />
+    <div className="min-h-screen bg-[#121212]">
+      {/* Cover Image */}
+      <div className="relative w-full h-48 sm:h-56 md:h-64">
+        <img
+          src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+          alt="Cover"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#121212]" />
+      </div>
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      {/* Profile Section */}
+      <div className="relative max-w-md mx-auto px-4 -mt-16">
+        {/* Profile Image */}
+        <div className="flex flex-col items-center">
+          <img
+            src="/images/profile-gemeas-final.jpg"
+            alt="Gemeas Scarlatt"
+            className="w-28 h-28 rounded-full border-4 border-[#121212] object-cover shadow-xl"
+          />
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md mx-auto text-center space-y-6">
-          {/* Profile Section */}
-          <div className="space-y-4">
-            {/* Profile Image */}
-            <div className="relative">
-              <img
-                src="/images/profile-gemeas-final.jpg"
-                alt="Gêmeas Scarlatt"
-                className="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover shadow-lg"
-              />
+          <div className="mt-3 text-center">
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-xl text-white">Gemeas Scarlatt</h1>
+              <div className="bg-[#1d9bf0] rounded-full p-0.5">
+                <Check className="w-3 h-3 text-white" />
+              </div>
+              <img src="https://img.icons8.com/color/20/000000/18-plus.png" alt="+18" className="w-5 h-5" />
             </div>
-
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-white text-balance">
-                VEM CONHECER NOSSO LADO{" "}
-                <span className="text-red-400 font-bold inline-flex items-center gap-1">
-                  <img src="https://img.icons8.com/color/24/000000/18-plus.png" alt="+18" className="w-6 h-6" />
-                </span>
-              </h1>
-            </div>
+            <p className="text-gray-400 text-sm mt-1">@gemeas_scarlatt</p>
           </div>
 
           {/* Stats */}
-          <div className="flex justify-center items-center gap-4 mb-6">
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold">{userCount.toLocaleString()} Assinantes</span>
-              </div>
+          <div className="flex items-center gap-6 mt-4">
+            <div className="flex items-center gap-1.5 text-gray-400">
+              <Users className="w-4 h-4" />
+              <span className="text-sm">{userCount.toLocaleString()} assinantes</span>
             </div>
-
-            <div className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/30">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold">{viewCount.toLocaleString()}</span>
-              </div>
+            <div className="flex items-center gap-1.5 text-gray-400">
+              <Eye className="w-4 h-4" />
+              <span className="text-sm">142 midias</span>
             </div>
           </div>
 
-          {/* Buttons */}
-          <div className="space-y-4">
-            {/* Privacy Button */}
-            <div
-              className="w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 backdrop-blur-sm cursor-pointer font-bold min-h-[60px]"
-              style={{
-                background: "white",
-                color: "#FB923C",
-                borderColor: "#FDBA74",
-                boxShadow: "0 0 0 1px #FDBA74, 0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-              }}
-              onClick={handlePrivacyClick}
-            >
-              <a href="https://privacy.com.br/profile/gemeasscarlatt" target="_blank" rel="noopener noreferrer">
-                <div className="flex items-center justify-center w-full">
-                  <span className="text-center w-full">PRIVACY (40% OFF)</span>
-                </div>
-              </a>
+          {/* Bio */}
+          <p className="text-gray-300 text-sm text-center mt-4 leading-relaxed max-w-sm">
+            {"Gemeas identicas por fora... mas completamente diferentes no que mostram no privado. Vem conhecer nosso lado +18"}
+          </p>
+        </div>
+
+        {/* Plan Selection */}
+        <div className="mt-8 space-y-3">
+          <h2 className="text-white text-base text-center mb-4">Escolha seu plano</h2>
+
+          {/* Monthly Plan */}
+          <button
+            type="button"
+            onClick={() => setSelectedPlan("monthly")}
+            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
+              selectedPlan === "monthly"
+                ? "border-[#FF6B00] bg-[#FF6B00]/10"
+                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  selectedPlan === "monthly" ? "border-[#FF6B00]" : "border-gray-600"
+                }`}
+              >
+                {selectedPlan === "monthly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
+              </div>
+              <div className="text-left">
+                <p className="text-white text-sm">Mensal</p>
+                <p className="text-gray-500 text-xs line-through">R$ {plans.monthly.original}</p>
+              </div>
+            </div>
+            <div className="text-right flex items-center gap-2">
+              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.monthly.discount}</span>
+              <p className="text-white text-sm">
+                R$ {plans.monthly.price}
+                <span className="text-gray-400 text-xs">{plans.monthly.period}</span>
+              </p>
+            </div>
+          </button>
+
+          {/* Quarterly Plan */}
+          <button
+            type="button"
+            onClick={() => setSelectedPlan("quarterly")}
+            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
+              selectedPlan === "quarterly"
+                ? "border-[#FF6B00] bg-[#FF6B00]/10"
+                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  selectedPlan === "quarterly" ? "border-[#FF6B00]" : "border-gray-600"
+                }`}
+              >
+                {selectedPlan === "quarterly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
+              </div>
+              <div className="text-left">
+                <p className="text-white text-sm">Trimestral</p>
+                <p className="text-gray-500 text-xs line-through">R$ {plans.quarterly.original}</p>
+              </div>
+            </div>
+            <div className="text-right flex items-center gap-2">
+              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.quarterly.discount}</span>
+              <p className="text-white text-sm">
+                R$ {plans.quarterly.price}
+                <span className="text-gray-400 text-xs">{plans.quarterly.period}</span>
+              </p>
+            </div>
+          </button>
+
+          {/* Yearly Plan */}
+          <button
+            type="button"
+            onClick={() => setSelectedPlan("yearly")}
+            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 relative ${
+              selectedPlan === "yearly"
+                ? "border-[#FF6B00] bg-[#FF6B00]/10"
+                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+            }`}
+          >
+            <div className="absolute -top-2.5 left-4 bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">
+              Mais popular
+            </div>
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  selectedPlan === "yearly" ? "border-[#FF6B00]" : "border-gray-600"
+                }`}
+              >
+                {selectedPlan === "yearly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
+              </div>
+              <div className="text-left">
+                <p className="text-white text-sm">Anual</p>
+                <p className="text-gray-500 text-xs line-through">R$ {plans.yearly.original}</p>
+              </div>
+            </div>
+            <div className="text-right flex items-center gap-2">
+              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.yearly.discount}</span>
+              <p className="text-white text-sm">
+                R$ {plans.yearly.price}
+                <span className="text-gray-400 text-xs">{plans.yearly.period}</span>
+              </p>
+            </div>
+          </button>
+        </div>
+
+        {/* Subscribe Button */}
+        <button
+          type="button"
+          onClick={handleSubscribe}
+          className="w-full mt-6 py-4 rounded-xl text-white text-base transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+          style={{
+            background: "linear-gradient(135deg, #FF6B00, #FF8C00)",
+          }}
+        >
+          Assinar por R$ {currentPlan.price}{currentPlan.period}
+        </button>
+
+        {/* Savings info */}
+        {currentPlan.savings && (
+          <p className="text-[#FF6B00] text-xs text-center mt-2">{currentPlan.savings}</p>
+        )}
+
+        {/* Security & Info */}
+        <div className="mt-6 space-y-3 pb-8">
+          <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
+            <Lock className="w-3 h-3" />
+            <span>Pagamento seguro e sigiloso</span>
+          </div>
+
+          {/* Features */}
+          <div className="bg-[#1a1a1a] rounded-xl p-4 space-y-3">
+            <div className="flex items-center gap-3">
+              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
+              <span className="text-gray-300 text-sm">Acesso a todo conteudo exclusivo</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
+              <span className="text-gray-300 text-sm">Fotos e videos diarios</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
+              <span className="text-gray-300 text-sm">Chat direto com as gemeas</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
+              <span className="text-gray-300 text-sm">Cancele quando quiser</span>
             </div>
           </div>
+
+          {/* FAQ */}
+          <details className="bg-[#1a1a1a] rounded-xl">
+            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-300 text-sm">
+              Como funciona?
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            </summary>
+            <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
+              {"Escolha seu plano, finalize o pagamento e tenha acesso imediato a todo conteudo exclusivo. O pagamento e recorrente e voce pode cancelar a qualquer momento."}
+            </div>
+          </details>
+
+          <details className="bg-[#1a1a1a] rounded-xl">
+            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-300 text-sm">
+              {"E seguro?"}
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            </summary>
+            <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
+              {"Sim! Todos os pagamentos sao processados de forma segura e sigilosa. Nenhuma informacao aparece na fatura do cartao."}
+            </div>
+          </details>
         </div>
       </div>
 
