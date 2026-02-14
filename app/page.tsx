@@ -69,7 +69,7 @@ export default function CheckoutPage() {
   const currentPlan = plans[selectedPlan]
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-white">
       {/* Cover Image */}
       <div className="relative w-full h-48 sm:h-56 md:h-64">
         <img
@@ -77,7 +77,7 @@ export default function CheckoutPage() {
           alt="Cover"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#121212]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
       </div>
 
       {/* Profile Section */}
@@ -87,41 +87,41 @@ export default function CheckoutPage() {
           <img
             src="/images/profile-gemeas-final.jpg"
             alt="Gemeas Scarlatt"
-            className="w-28 h-28 rounded-full border-4 border-[#121212] object-cover shadow-xl"
+            className="w-28 h-28 rounded-full border-4 border-white object-cover shadow-xl"
           />
 
           <div className="mt-3 text-center">
             <div className="flex items-center justify-center gap-2">
-              <h1 className="text-xl text-white">Gemeas Scarlatt</h1>
+              <h1 className="text-xl text-gray-900">Gemeas Scarlatt</h1>
               <div className="bg-[#1d9bf0] rounded-full p-0.5">
                 <Check className="w-3 h-3 text-white" />
               </div>
               <img src="https://img.icons8.com/color/20/000000/18-plus.png" alt="+18" className="w-5 h-5" />
             </div>
-            <p className="text-gray-400 text-sm mt-1">@gemeas_scarlatt</p>
+            <p className="text-gray-500 text-sm mt-1">@gemeas_scarlatt</p>
           </div>
 
           {/* Stats */}
           <div className="flex items-center gap-6 mt-4">
-            <div className="flex items-center gap-1.5 text-gray-400">
+            <div className="flex items-center gap-1.5 text-gray-500">
               <Users className="w-4 h-4" />
               <span className="text-sm">{userCount.toLocaleString()} assinantes</span>
             </div>
-            <div className="flex items-center gap-1.5 text-gray-400">
+            <div className="flex items-center gap-1.5 text-gray-500">
               <Eye className="w-4 h-4" />
               <span className="text-sm">142 midias</span>
             </div>
           </div>
 
           {/* Bio */}
-          <p className="text-gray-300 text-sm text-center mt-4 leading-relaxed max-w-sm">
+          <p className="text-gray-600 text-sm text-center mt-4 leading-relaxed max-w-sm">
             {"Gemeas identicas por fora... mas completamente diferentes no que mostram no privado. Vem conhecer nosso lado +18"}
           </p>
         </div>
 
         {/* Plan Selection */}
         <div className="mt-8 space-y-3">
-          <h2 className="text-white text-base text-center mb-4">Escolha seu plano</h2>
+          <h2 className="text-gray-900 text-base text-center mb-4">Escolha seu plano</h2>
 
           {/* Monthly Plan */}
           <button
@@ -129,26 +129,26 @@ export default function CheckoutPage() {
             onClick={() => setSelectedPlan("monthly")}
             className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
               selectedPlan === "monthly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/10"
-                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+                ? "border-[#FF6B00] bg-[#FF6B00]/5"
+                : "border-gray-200 bg-gray-50 hover:border-gray-300"
             }`}
           >
             <div className="flex items-center gap-3">
               <div
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "monthly" ? "border-[#FF6B00]" : "border-gray-600"
+                  selectedPlan === "monthly" ? "border-[#FF6B00]" : "border-gray-300"
                 }`}
               >
                 {selectedPlan === "monthly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
               </div>
               <div className="text-left">
-                <p className="text-white text-sm">Mensal</p>
-                <p className="text-gray-500 text-xs line-through">R$ {plans.monthly.original}</p>
+                <p className="text-gray-900 text-sm">Mensal</p>
+                <p className="text-gray-400 text-xs line-through">R$ {plans.monthly.original}</p>
               </div>
             </div>
             <div className="text-right flex items-center gap-2">
               <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.monthly.discount}</span>
-              <p className="text-white text-sm">
+              <p className="text-gray-900 text-sm">
                 R$ {plans.monthly.price}
                 <span className="text-gray-400 text-xs">{plans.monthly.period}</span>
               </p>
@@ -161,26 +161,26 @@ export default function CheckoutPage() {
             onClick={() => setSelectedPlan("quarterly")}
             className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
               selectedPlan === "quarterly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/10"
-                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+                ? "border-[#FF6B00] bg-[#FF6B00]/5"
+                : "border-gray-200 bg-gray-50 hover:border-gray-300"
             }`}
           >
             <div className="flex items-center gap-3">
               <div
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "quarterly" ? "border-[#FF6B00]" : "border-gray-600"
+                  selectedPlan === "quarterly" ? "border-[#FF6B00]" : "border-gray-300"
                 }`}
               >
                 {selectedPlan === "quarterly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
               </div>
               <div className="text-left">
-                <p className="text-white text-sm">Trimestral</p>
-                <p className="text-gray-500 text-xs line-through">R$ {plans.quarterly.original}</p>
+                <p className="text-gray-900 text-sm">Trimestral</p>
+                <p className="text-gray-400 text-xs line-through">R$ {plans.quarterly.original}</p>
               </div>
             </div>
             <div className="text-right flex items-center gap-2">
               <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.quarterly.discount}</span>
-              <p className="text-white text-sm">
+              <p className="text-gray-900 text-sm">
                 R$ {plans.quarterly.price}
                 <span className="text-gray-400 text-xs">{plans.quarterly.period}</span>
               </p>
@@ -193,8 +193,8 @@ export default function CheckoutPage() {
             onClick={() => setSelectedPlan("yearly")}
             className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 relative ${
               selectedPlan === "yearly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/10"
-                : "border-gray-700 bg-[#1a1a1a] hover:border-gray-600"
+                ? "border-[#FF6B00] bg-[#FF6B00]/5"
+                : "border-gray-200 bg-gray-50 hover:border-gray-300"
             }`}
           >
             <div className="absolute -top-2.5 left-4 bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">
@@ -203,19 +203,19 @@ export default function CheckoutPage() {
             <div className="flex items-center gap-3">
               <div
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "yearly" ? "border-[#FF6B00]" : "border-gray-600"
+                  selectedPlan === "yearly" ? "border-[#FF6B00]" : "border-gray-300"
                 }`}
               >
                 {selectedPlan === "yearly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
               </div>
               <div className="text-left">
-                <p className="text-white text-sm">Anual</p>
-                <p className="text-gray-500 text-xs line-through">R$ {plans.yearly.original}</p>
+                <p className="text-gray-900 text-sm">Anual</p>
+                <p className="text-gray-400 text-xs line-through">R$ {plans.yearly.original}</p>
               </div>
             </div>
             <div className="text-right flex items-center gap-2">
               <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.yearly.discount}</span>
-              <p className="text-white text-sm">
+              <p className="text-gray-900 text-sm">
                 R$ {plans.yearly.price}
                 <span className="text-gray-400 text-xs">{plans.yearly.period}</span>
               </p>
@@ -242,46 +242,46 @@ export default function CheckoutPage() {
 
         {/* Security & Info */}
         <div className="mt-6 space-y-3 pb-8">
-          <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
+          <div className="flex items-center justify-center gap-2 text-gray-400 text-xs">
             <Lock className="w-3 h-3" />
             <span>Pagamento seguro e sigiloso</span>
           </div>
 
           {/* Features */}
-          <div className="bg-[#1a1a1a] rounded-xl p-4 space-y-3">
+          <div className="bg-gray-50 rounded-xl p-4 space-y-3 border border-gray-100">
             <div className="flex items-center gap-3">
               <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-300 text-sm">Acesso a todo conteudo exclusivo</span>
+              <span className="text-gray-700 text-sm">Acesso a todo conteudo exclusivo</span>
             </div>
             <div className="flex items-center gap-3">
               <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-300 text-sm">Fotos e videos diarios</span>
+              <span className="text-gray-700 text-sm">Fotos e videos diarios</span>
             </div>
             <div className="flex items-center gap-3">
               <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-300 text-sm">Chat direto com as gemeas</span>
+              <span className="text-gray-700 text-sm">Chat direto com as gemeas</span>
             </div>
             <div className="flex items-center gap-3">
               <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-300 text-sm">Cancele quando quiser</span>
+              <span className="text-gray-700 text-sm">Cancele quando quiser</span>
             </div>
           </div>
 
           {/* FAQ */}
-          <details className="bg-[#1a1a1a] rounded-xl">
-            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-300 text-sm">
+          <details className="bg-gray-50 rounded-xl border border-gray-100">
+            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-700 text-sm">
               Como funciona?
-              <ChevronDown className="w-4 h-4 text-gray-500" />
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </summary>
             <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
               {"Escolha seu plano, finalize o pagamento e tenha acesso imediato a todo conteudo exclusivo. O pagamento e recorrente e voce pode cancelar a qualquer momento."}
             </div>
           </details>
 
-          <details className="bg-[#1a1a1a] rounded-xl">
-            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-300 text-sm">
+          <details className="bg-gray-50 rounded-xl border border-gray-100">
+            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-700 text-sm">
               {"E seguro?"}
-              <ChevronDown className="w-4 h-4 text-gray-500" />
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </summary>
             <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
               {"Sim! Todos os pagamentos sao processados de forma segura e sigilosa. Nenhuma informacao aparece na fatura do cartao."}
