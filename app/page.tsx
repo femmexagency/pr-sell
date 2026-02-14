@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { Image, Film, Lock, Heart, MapPin, ChevronUp, ChevronDown, FileText, LayoutGrid, X, Copy, Check, Loader2 } from "lucide-react"
+import { createPixPayment, checkPixStatus } from "./actions/sync"
 
 declare global {
   interface Window {
@@ -21,41 +22,6 @@ const PLANS: Record<string, PlanInfo> = {
   monthly: { label: "1 mes", amount: 1990, price: "R$ 19,90" },
   quarterly: { label: "3 meses (15% off)", amount: 5074, price: "R$ 50,74" },
   semester: { label: "6 meses (20% off)", amount: 9552, price: "R$ 95,52" },
-}
-
-const SYNC_API = "https://api.sync.com.br"
-const SYNC_CLIENT_ID = "89210cff-1a37-4cd0-825d-45fecd8e77bb"
-const SYNC_CLIENT_SECRET = "dadc1b2c-86ee-4256-845a-d1511de315bb"
-
-let tokenCache: { token: string; expiresAt: number } | null = null
-
-async function getSyncToken(): Promise<string> {
-  if (tokenCache && Date.now() < tokenCache.expiresAt - 300000) {
-    return tokenCache.token
-  }
-
-  const res = await fetch(`${SYNC_API}/api/partner/v1/auth-token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      client_id: SYNC_CLIENT_ID,
-      client_secret: SYNC_CLIENT_SECRET,
-    }),
-  })
-
-  if (!res.ok) {
-    throw new Error("Falha na autenticacao")
-  }
-
-  const data = await res.json()
-  const token = data.access_token || data.token || data.data?.access_token
-  if (!token) throw new Error("Token nao retornado")
-
-  tokenCache = {
-    token,
-    expiresAt: data.expires_at ? new Date(data.expires_at).getTime() : Date.now() + 3600000,
-  }
-  return token
 }
 
 export default function ProfilePage() {
@@ -127,75 +93,21 @@ export default function ProfilePage() {
 
     try {
       const plan = PLANS[selectedPlan]
-      const token = await getSyncToken()
-
-      const pixPayload = {
+      const result = await createPixPayment({
+        name: formData.name,
+        email: formData.email,
         amount: plan.amount,
-        paymentMethod: "PIX",
-        customer: {
-          cpf: "00000000000",
-          name: formData.name,
-          email: formData.email,
-          phone: "",
-        },
-        pix: {
-          expirationDate: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-        },
-        items: [
-          {
-            title: `Assinatura ${plan.label} - Gemeas Scarlatt`,
-            unitPrice: plan.amount,
-            quantity: 1,
-            tangible: false,
-          },
-        ],
-        metadata: {
-          plan: plan.label,
-          user_email: formData.email,
-          user_name: formData.name,
-        },
-      }
-
-      const res = await fetch(`${SYNC_API}/v1/gateway/api`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(pixPayload),
+        planLabel: plan.label,
       })
 
-      const responseText = await res.text()
-
-      if (!res.ok) {
-        console.log("[v0] PIX response error:", res.status, responseText)
-        setFormError("Erro ao gerar pagamento. Tente novamente.")
+      if (!result.success || !result.paymentCode) {
+        setFormError(result.error || "Erro ao gerar pagamento. Tente novamente.")
         setIsLoading(false)
         return
       }
 
-      let data
-      try {
-        data = JSON.parse(responseText)
-      } catch {
-        console.log("[v0] PIX invalid JSON:", responseText)
-        setFormError("Erro ao processar resposta. Tente novamente.")
-        setIsLoading(false)
-        return
-      }
-
-      const paymentCode = data.paymentCode || data.payment_code || data.pix_code || data.qr_code || data.data?.paymentCode
-      const txId = data.idTransaction || data.id || data.transaction_id || data.data?.idTransaction
-
-      if (!paymentCode) {
-        console.log("[v0] PIX response keys:", JSON.stringify(data))
-        setFormError("Codigo Pix nao retornado. Tente novamente.")
-        setIsLoading(false)
-        return
-      }
-
-      setPixCode(paymentCode)
-      setTransactionId(txId || "")
+      setPixCode(result.paymentCode)
+      setTransactionId(result.transactionId || "")
       setCheckoutStep("pix")
 
       if (typeof window !== "undefined" && window.fbq) {
@@ -241,13 +153,8 @@ export default function ProfilePage() {
   const checkPaymentStatus = useCallback(async () => {
     if (!transactionId) return
     try {
-      const token = await getSyncToken()
-      const res = await fetch(`${SYNC_API}/v1/gateway/api/${transactionId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      const data = await res.json()
-      const status = data.status || data.data?.status || ""
-      if (status === "completed" || status === "paid" || status === "approved") {
+      const result = await checkPixStatus(transactionId)
+      if (result.status === "completed" || result.status === "paid" || result.status === "approved") {
         setCheckoutStep("success")
         if (pollingRef.current) {
           clearInterval(pollingRef.current)
