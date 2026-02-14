@@ -11,7 +11,10 @@ async function getAuthToken(): Promise<string> {
     return cachedToken.token
   }
 
-  const res = await fetch(`${SYNC_API_BASE}/api/partner/v1/auth-token`, {
+  const authUrl = `${SYNC_API_BASE}/api/partner/v1/auth-token`
+  console.log("[v0] Requesting auth token from:", authUrl)
+
+  const res = await fetch(authUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -20,18 +23,32 @@ async function getAuthToken(): Promise<string> {
     }),
   })
 
+  const responseText = await res.text()
+  console.log("[v0] Auth response status:", res.status)
+  console.log("[v0] Auth response body:", responseText)
+
   if (!res.ok) {
-    const errorText = await res.text()
-    console.error("[v0] Auth failed:", res.status, errorText)
-    throw new Error("Failed to get auth token")
+    throw new Error(`Auth failed: ${res.status} - ${responseText}`)
   }
 
-  const data = await res.json()
-  cachedToken = {
-    token: data.access_token,
-    expiresAt: new Date(data.expires_at).getTime(),
+  let data
+  try {
+    data = JSON.parse(responseText)
+  } catch {
+    throw new Error(`Auth returned invalid JSON: ${responseText}`)
   }
-  return data.access_token
+
+  const token = data.access_token || data.token || data.data?.access_token
+  if (!token) {
+    console.log("[v0] Auth response keys:", Object.keys(data))
+    throw new Error(`No token in auth response: ${responseText}`)
+  }
+
+  cachedToken = {
+    token: token,
+    expiresAt: data.expires_at ? new Date(data.expires_at).getTime() : Date.now() + 3600000,
+  }
+  return token
 }
 
 export async function POST(request: NextRequest) {
@@ -91,6 +108,9 @@ export async function POST(request: NextRequest) {
       postbackUrl: "https://gemeasscarlatt.com/api/sync/webhook",
     }
 
+    console.log("[v0] Sending PIX request with token:", token.substring(0, 20) + "...")
+    console.log("[v0] PIX payload amount:", pixPayload.amount)
+
     const response = await fetch(`${SYNC_API_BASE}/v1/gateway/api`, {
       method: "POST",
       headers: {
@@ -100,13 +120,20 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(pixPayload),
     })
 
+    const pixResponseText = await response.text()
+    console.log("[v0] PIX response status:", response.status)
+    console.log("[v0] PIX response body:", pixResponseText)
+
     if (!response.ok) {
-      const errorText = await response.text()
-      console.error("[v0] PIX request failed:", response.status, errorText)
-      return NextResponse.json({ error: "Payment request failed" }, { status: response.status })
+      return NextResponse.json({ error: `Payment request failed: ${pixResponseText}` }, { status: response.status })
     }
 
-    const data = await response.json()
+    let data
+    try {
+      data = JSON.parse(pixResponseText)
+    } catch {
+      return NextResponse.json({ error: `Invalid response from payment provider: ${pixResponseText}` }, { status: 500 })
+    }
 
     return NextResponse.json({
       status: data.status,
