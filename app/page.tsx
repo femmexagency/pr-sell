@@ -156,7 +156,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={() => handlePlanClick("monthly")}
                 className="w-full flex items-center justify-between py-3 px-4 rounded-xl mb-3 transition-all duration-200 hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #E8A87C, #D4916A)" }}
+                style={{ background: "linear-gradient(135deg, #FF9A5C, #FF7A30)" }}
               >
                 <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"1 m\u00eas"}</span>
                 <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 19,90</span>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={() => handlePlanClick("quarterly")}
                     className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg, #E09570, #D07D58)" }}
+                    style={{ background: "linear-gradient(135deg, #FF8A45, #FF6B1A)" }}
                   >
                     <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"3 meses (15% off )"}</span>
                     <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 50,74</span>
@@ -196,7 +196,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={() => handlePlanClick("yearly")}
                     className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg, #D98D62, #C87A50)" }}
+                    style={{ background: "linear-gradient(135deg, #FF7B30, #FF5C0A)" }}
                   >
                     <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"6 meses (20% off )"}</span>
                     <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 95,52</span>
