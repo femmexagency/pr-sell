@@ -1,6 +1,7 @@
 "use server"
 
-const SYNC_API = "https://api.sync.com.br"
+const SYNC_AUTH_URL = "https://api.sync.com.br/api/partner/v1/auth-token"
+const SYNC_GATEWAY_URL = "https://api.sync.com.br/v1/gateway/api"
 const CLIENT_ID = "89210cff-1a37-4cd0-825d-45fecd8e77bb"
 const CLIENT_SECRET = "dadc1b2c-86ee-4256-845a-d1511de315bb"
 
@@ -11,28 +12,43 @@ async function getToken(): Promise<string> {
     return cachedToken.token
   }
 
-  const res = await fetch(`${SYNC_API}/api/partner/v1/auth-token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ client_id: CLIENT_ID, client_secret: CLIENT_SECRET }),
-  })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 15000)
 
-  const text = await res.text()
-  console.log("[v0] Auth status:", res.status, "body:", text.substring(0, 200))
+  try {
+    const res = await fetch(SYNC_AUTH_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({ client_id: CLIENT_ID, client_secret: CLIENT_SECRET }),
+      signal: controller.signal,
+      cache: "no-store",
+    })
 
-  if (!res.ok) {
-    throw new Error(`Auth failed: ${res.status}`)
+    clearTimeout(timeout)
+    const text = await res.text()
+    console.log("[v0] Auth response status:", res.status, "length:", text.length)
+
+    if (!res.ok) {
+      console.log("[v0] Auth error body:", text.substring(0, 200))
+      throw new Error(`Auth failed: ${res.status} - ${text.substring(0, 100)}`)
+    }
+
+    const data = JSON.parse(text)
+    const token = data.access_token || data.token
+    if (!token) throw new Error("No token returned")
+
+    cachedToken = {
+      token,
+      expiresAt: data.expires_at ? new Date(data.expires_at).getTime() : Date.now() + 3600000,
+    }
+    return token
+  } catch (err) {
+    clearTimeout(timeout)
+    throw err
   }
-
-  const data = JSON.parse(text)
-  const token = data.access_token || data.token
-  if (!token) throw new Error("No token returned")
-
-  cachedToken = {
-    token,
-    expiresAt: data.expires_at ? new Date(data.expires_at).getTime() : Date.now() + 3600000,
-  }
-  return token
 }
 
 interface PixInput {
@@ -90,13 +106,15 @@ export async function createPixPayment(input: PixInput) {
 
     console.log("[v0] Sending PIX request...")
 
-    const res = await fetch(`${SYNC_API}/v1/gateway/api`, {
+    const res = await fetch(SYNC_GATEWAY_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
+      cache: "no-store",
     })
 
     const text = await res.text()
@@ -121,6 +139,14 @@ export async function createPixPayment(input: PixInput) {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Erro desconhecido"
     console.log("[v0] createPixPayment error:", message)
+
+    if (message.includes("Invalid request") || message.includes("public URLs")) {
+      return {
+        success: false,
+        error: "O pagamento Pix funciona apenas em producao. Faca o deploy na Vercel para testar.",
+      }
+    }
+
     return { success: false, error: message }
   }
 }
@@ -129,8 +155,12 @@ export async function checkPixStatus(transactionId: string) {
   try {
     const token = await getToken()
 
-    const res = await fetch(`${SYNC_API}/v1/gateway/api/${transactionId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const res = await fetch(`${SYNC_GATEWAY_URL}/${transactionId}`, {
+      headers: {
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
     })
 
     const text = await res.text()
