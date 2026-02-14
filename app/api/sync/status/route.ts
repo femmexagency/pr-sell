@@ -1,14 +1,34 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const SYNC_API_BASE = "https://api.sync.com.br"
+const CLIENT_ID = "89210cff-1a37-4cd0-825d-45fecd8e77bb"
+const CLIENT_SECRET = "dadc1b2c-86ee-4256-845a-d1511de315bb"
+
+let cachedToken: { token: string; expiresAt: number } | null = null
 
 async function getAuthToken(): Promise<string> {
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000"
-  const res = await fetch(`${baseUrl}/api/sync/auth`, { method: "POST" })
+  if (cachedToken && Date.now() < cachedToken.expiresAt - 300000) {
+    return cachedToken.token
+  }
+
+  const res = await fetch(`${SYNC_API_BASE}/api/partner/v1/auth-token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error("Failed to get auth token")
+  }
+
   const data = await res.json()
-  if (!data.access_token) throw new Error("Failed to get auth token")
+  cachedToken = {
+    token: data.access_token,
+    expiresAt: new Date(data.expires_at).getTime(),
+  }
   return data.access_token
 }
 
