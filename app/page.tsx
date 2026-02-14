@@ -111,7 +111,10 @@ export default function ProfilePage() {
                 style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}
               >
                 <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"1 m\u00eas"}</span>
-                <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 19,90</span>
+                <span className="text-gray-800 text-sm flex items-center gap-1.5">
+                  <span className="line-through text-gray-500" style={{ fontWeight: 400 }}>R$ 49,90</span>
+                  <span style={{ fontWeight: 600 }}>R$ 17,00</span>
+                </span>
               </button>
             </div>
 
