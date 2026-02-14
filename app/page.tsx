@@ -1,104 +1,16 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
-import { Image, Film, Lock, Heart, MapPin, ChevronUp, ChevronDown, FileText, LayoutGrid, X, Copy, Check, Loader2 } from "lucide-react"
-import { createPixPayment, checkPixStatus } from "./actions/sync"
-
-type CheckoutStep = "closed" | "form" | "pix" | "success"
-
-const PLANS: Record<string, { label: string; amount: number; price: string }> = {
-  monthly: { label: "1 mes", amount: 1990, price: "R$ 19,90" },
-  quarterly: { label: "3 meses (15% off)", amount: 5074, price: "R$ 50,74" },
-  semester: { label: "6 meses (20% off)", amount: 9552, price: "R$ 95,52" },
-}
+import { useState } from "react"
+import { Image, Film, Lock, Heart, MapPin, ChevronUp, ChevronDown, FileText, LayoutGrid } from "lucide-react"
 
 export default function ProfilePage() {
   const [showPromos, setShowPromos] = useState(true)
   const [activeTab, setActiveTab] = useState<"posts" | "media">("posts")
   const [bioExpanded, setBioExpanded] = useState(false)
 
-  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>("closed")
-  const [selectedPlan, setSelectedPlan] = useState("")
-  const [formData, setFormData] = useState({ name: "", email: "" })
-  const [isLoading, setIsLoading] = useState(false)
-  const [pixCode, setPixCode] = useState("")
-  const [transactionId, setTransactionId] = useState("")
-  const [copied, setCopied] = useState(false)
-  const [formError, setFormError] = useState("")
-  const pollingRef = useRef<NodeJS.Timeout | null>(null)
-
-  const handlePlanClick = (planKey: string) => {
-    setSelectedPlan(planKey)
-    setCheckoutStep("form")
-    setFormError("")
+  const handlePlanClick = (plan: string) => {
+    // Gateway sera integrado aqui
   }
-
-  const handleSubmitForm = async () => {
-    if (!formData.name.trim() || !formData.email.trim()) {
-      setFormError("Preencha todos os campos.")
-      return
-    }
-    setIsLoading(true)
-    setFormError("")
-
-    const plan = PLANS[selectedPlan]
-    const result = await createPixPayment({
-      name: formData.name,
-      email: formData.email,
-      amount: plan.amount,
-      planLabel: plan.label,
-    })
-
-    if (!result.success || !result.paymentCode) {
-      setFormError(result.error || "Erro ao gerar pagamento.")
-      setIsLoading(false)
-      return
-    }
-
-    setPixCode(result.paymentCode)
-    setTransactionId(result.transactionId || "")
-    setCheckoutStep("pix")
-    setIsLoading(false)
-  }
-
-  const handleCopyPix = async () => {
-    try {
-      await navigator.clipboard.writeText(pixCode)
-    } catch {
-      const ta = document.createElement("textarea")
-      ta.value = pixCode
-      document.body.appendChild(ta)
-      ta.select()
-      document.execCommand("copy")
-      document.body.removeChild(ta)
-    }
-    setCopied(true)
-    setTimeout(() => setCopied(false), 3000)
-  }
-
-  const closeCheckout = () => {
-    setCheckoutStep("closed")
-    setFormError("")
-    if (pollingRef.current) clearInterval(pollingRef.current)
-  }
-
-  const pollStatus = useCallback(async () => {
-    if (!transactionId) return
-    try {
-      const result = await checkPixStatus(transactionId)
-      if (result.status === "completed" || result.status === "paid" || result.status === "APPROVED" || result.status === "approved") {
-        setCheckoutStep("success")
-        if (pollingRef.current) clearInterval(pollingRef.current)
-      }
-    } catch { /* retry */ }
-  }, [transactionId])
-
-  useEffect(() => {
-    if (checkoutStep === "pix" && transactionId) {
-      pollingRef.current = setInterval(pollStatus, 5000)
-      return () => { if (pollingRef.current) clearInterval(pollingRef.current) }
-    }
-  }, [checkoutStep, transactionId, pollStatus])
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0EB" }}>
@@ -328,80 +240,6 @@ export default function ProfilePage() {
         <div className="h-6" />
       </div>
 
-      {/* Checkout Modal */}
-      {checkoutStep !== "closed" && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeCheckout} />
-          <div className="relative bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
-              <h2 className="text-gray-900 text-base" style={{ fontWeight: 600 }}>
-                {checkoutStep === "form" && "Finalizar assinatura"}
-                {checkoutStep === "pix" && "Pagamento via Pix"}
-                {checkoutStep === "success" && "Pagamento confirmado"}
-              </h2>
-              <button type="button" onClick={closeCheckout} className="text-gray-400 hover:text-gray-600 p-1">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {checkoutStep === "form" && (
-              <div className="p-5 space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: "linear-gradient(to right, #F0C8A0, #E8A8A0)" }}>
-                  <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{PLANS[selectedPlan]?.label}</span>
-                  <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>{PLANS[selectedPlan]?.price}</span>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label htmlFor="name" className="block text-sm text-gray-600 mb-1">Nome completo *</label>
-                    <input id="name" type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A]" placeholder="Seu nome completo" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm text-gray-600 mb-1">E-mail *</label>
-                    <input id="email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#E8774A] focus:ring-1 focus:ring-[#E8774A]" placeholder="seu@email.com" />
-                  </div>
-                </div>
-                {formError && <p className="text-red-500 text-xs">{formError}</p>}
-                <button type="button" onClick={handleSubmitForm} disabled={isLoading} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2" style={{ background: "linear-gradient(to right, #E8774A, #D4633A)" }}>
-                  {isLoading ? (<><Loader2 className="w-4 h-4 animate-spin" />Gerando Pix...</>) : `Pagar ${PLANS[selectedPlan]?.price}`}
-                </button>
-                <p className="text-gray-400 text-xs text-center flex items-center justify-center gap-1">
-                  <Lock className="w-3 h-3" />Pagamento seguro e sigiloso
-                </p>
-              </div>
-            )}
-
-            {checkoutStep === "pix" && (
-              <div className="p-5 space-y-4">
-                <div className="text-center space-y-2">
-                  <p className="text-gray-700 text-sm">Copie o codigo Pix abaixo e pague pelo app do seu banco.</p>
-                  <p className="text-gray-500 text-xs">O acesso sera liberado automaticamente apos a confirmacao.</p>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                  <p className="text-gray-700 text-xs break-all font-mono leading-relaxed">{pixCode}</p>
-                </div>
-                <button type="button" onClick={handleCopyPix} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90 flex items-center justify-center gap-2" style={{ background: copied ? "#22c55e" : "linear-gradient(to right, #E8774A, #D4633A)" }}>
-                  {copied ? (<><Check className="w-4 h-4" />Codigo copiado!</>) : (<><Copy className="w-4 h-4" />Copiar codigo Pix</>)}
-                </button>
-                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Aguardando pagamento...</span>
-                </div>
-                <p className="text-gray-400 text-xs text-center">{PLANS[selectedPlan]?.label} - {PLANS[selectedPlan]?.price}</p>
-              </div>
-            )}
-
-            {checkoutStep === "success" && (
-              <div className="p-5 space-y-4 text-center">
-                <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center" style={{ background: "#22c55e" }}>
-                  <Check className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-gray-900 text-lg" style={{ fontWeight: 600 }}>Pagamento confirmado!</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">Seu acesso ao conteudo exclusivo foi liberado. Voce recebera os detalhes no e-mail cadastrado.</p>
-                <button type="button" onClick={closeCheckout} className="w-full py-3 rounded-xl text-white text-sm hover:opacity-90" style={{ background: "linear-gradient(to right, #E8774A, #D4633A)" }}>Fechar</button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
