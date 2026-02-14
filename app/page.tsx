@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, Eye, Check, Lock, ChevronDown } from "lucide-react"
+import { Image, Film, Lock, Heart, MapPin, ChevronUp, ChevronDown, FileText, LayoutGrid } from "lucide-react"
 
 declare global {
   interface Window {
@@ -9,20 +9,14 @@ declare global {
   }
 }
 
-export default function CheckoutPage() {
-  const [userCount, setUserCount] = useState(1247)
-  const [selectedPlan, setSelectedPlan] = useState<"monthly" | "quarterly" | "yearly">("monthly")
+export default function ProfilePage() {
+  const [showPromos, setShowPromos] = useState(true)
+  const [activeTab, setActiveTab] = useState<"posts" | "media">("posts")
+  const [bioExpanded, setBioExpanded] = useState(false)
 
   const FB_ACCESS_TOKEN =
     "EAAJ6bVYk96kBPtG7OmkBoNHaw6HN1EB5BlLeFp51NAskuyxWFIV86Qqho64mwlfcNYVH6fWHRPZBL6boFtY5TTTZA3H15y3GIxZCEuvC8wBtZCyi6hvWVwPPjZA9rXlLFqr97VbCPZCfXzmF8xKzrVk7ncXm0U111ZCvYziOaU7yFWyp0TZB2ebNgKQZCMA9zWQZDZD"
   const PIXEL_ID = "2057231185018157"
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setUserCount((prev) => prev + Math.floor(Math.random() * 3))
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
 
   const sendConversionEvent = async (eventName: string) => {
     try {
@@ -52,7 +46,7 @@ export default function CheckoutPage() {
     }
   }
 
-  const handleSubscribe = () => {
+  const handlePlanClick = (plan: string) => {
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "InitiateCheckout")
     }
@@ -60,234 +54,260 @@ export default function CheckoutPage() {
     window.open("https://privacy.com.br/checkout/gemeasscarlatt", "_blank")
   }
 
-  const plans = {
-    monthly: { price: "29,90", original: "49,90", period: "/mes", discount: "40% OFF", savings: "" },
-    quarterly: { price: "24,90", original: "49,90", period: "/mes", discount: "50% OFF", savings: "Economize R$75" },
-    yearly: { price: "19,90", original: "49,90", period: "/mes", discount: "60% OFF", savings: "Economize R$360" },
-  }
-
-  const currentPlan = plans[selectedPlan]
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "PageView")
+    }
+  }, [])
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Cover Image */}
-      <div className="relative w-full h-48 sm:h-56 md:h-64">
-        <img
-          src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
-          alt="Cover"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
-      </div>
-
-      {/* Profile Section */}
-      <div className="relative max-w-md mx-auto px-4 -mt-16">
-        {/* Profile Image */}
-        <div className="flex flex-col items-center">
-          <img
-            src="/images/profile-gemeas-final.jpg"
-            alt="Gemeas Scarlatt"
-            className="w-28 h-28 rounded-full border-4 border-white object-cover shadow-xl"
-          />
-
-          <div className="mt-3 text-center">
-            <div className="flex items-center justify-center gap-2">
-              <h1 className="text-xl text-gray-900">Gemeas Scarlatt</h1>
-              <div className="bg-[#1d9bf0] rounded-full p-0.5">
-                <Check className="w-3 h-3 text-white" />
+    <div className="min-h-screen" style={{ background: "#F5F0EB" }}>
+      {/* Card Container */}
+      <div className="max-w-xl mx-auto">
+        {/* Cover + Profile */}
+        <div className="bg-white rounded-b-2xl shadow-sm overflow-hidden">
+          {/* Cover Image */}
+          <div className="relative w-full h-36 sm:h-44">
+            <img
+              src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+              alt="Cover"
+              className="w-full h-full object-cover"
+            />
+            {/* Stats overlay on cover */}
+            <div className="absolute bottom-3 right-3 flex items-center gap-3 text-white text-xs">
+              <div className="flex items-center gap-1">
+                <Image className="w-3.5 h-3.5" />
+                <span>10</span>
               </div>
-              <img src="https://img.icons8.com/color/20/000000/18-plus.png" alt="+18" className="w-5 h-5" />
-            </div>
-            <p className="text-gray-500 text-sm mt-1">@gemeas_scarlatt</p>
-          </div>
-
-          {/* Stats */}
-          <div className="flex items-center gap-6 mt-4">
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Users className="w-4 h-4" />
-              <span className="text-sm">{userCount.toLocaleString()} assinantes</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <Eye className="w-4 h-4" />
-              <span className="text-sm">142 midias</span>
+              <div className="flex items-center gap-1">
+                <Film className="w-3.5 h-3.5" />
+                <span>15</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Lock className="w-3.5 h-3.5" />
+                <span>3</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Heart className="w-3.5 h-3.5" />
+                <span>1.6K</span>
+              </div>
             </div>
           </div>
 
-          {/* Bio */}
-          <p className="text-gray-600 text-sm text-center mt-4 leading-relaxed max-w-sm">
-            {"Gemeas identicas por fora... mas completamente diferentes no que mostram no privado. Vem conhecer nosso lado +18"}
-          </p>
+          {/* Profile Info */}
+          <div className="relative px-5 pb-5">
+            {/* Profile Image - overlapping cover */}
+            <div className="-mt-12">
+              <img
+                src="/images/profile-gemeas-final.jpg"
+                alt="Gemeas Scarlatt"
+                className="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md"
+              />
+            </div>
+
+            {/* Name + Badge */}
+            <div className="mt-2">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-lg text-gray-900" style={{ fontWeight: 600 }}>
+                  {"G\u00eameas Scarlatt"}
+                </h1>
+                <svg className="w-4 h-4" viewBox="0 0 22 22" fill="none">
+                  <circle cx="11" cy="11" r="11" fill="#E8774A" />
+                  <path d="M9.5 14.5L6 11l1.4-1.4 2.1 2.1 4.6-4.6L15.5 8.5 9.5 14.5z" fill="white" />
+                </svg>
+              </div>
+              <p className="text-gray-500 text-sm">@Gemeasscarlatt</p>
+            </div>
+
+            {/* Bio */}
+            <div className="mt-3">
+              <p className="text-gray-700 text-sm leading-relaxed">
+                {"Tati & Tau \u2014 Ruivas de olhos claros, naturais, 21 anos. Id\u00eanticas e meigas a primeira vista. N\u00e3o somos qualquer conte\u00fado. Somos o desejo que voc\u00ea n\u00e3o devia ter. Exclusivo e raro, e.. Seu \u2014 se..."}
+              </p>
+              <button
+                type="button"
+                onClick={() => setBioExpanded(!bioExpanded)}
+                className="text-sm mt-1"
+                style={{ color: "#E8774A" }}
+              >
+                {bioExpanded ? "Ver menos" : "Ler mais"}
+              </button>
+              {bioExpanded && (
+                <p className="text-gray-700 text-sm leading-relaxed mt-1">
+                  {"...voc\u00ea tiver coragem de entrar. Conte\u00fado novo todo dia. Vem conhecer nosso lado +18."}
+                </p>
+              )}
+            </div>
+
+            {/* Location */}
+            <div className="flex items-center gap-1.5 mt-4 text-gray-600 text-sm">
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Brasil</span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 mt-3">
+              <a
+                href="https://instagram.com/gemeas_scarlatt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46 6.28 6.28 0 001.88-4.48V8.76a8.26 8.26 0 004.84 1.56v-3.5a4.85 4.85 0 01-1.14-.13z" />
+                </svg>
+              </a>
+            </div>
+
+            {/* Subscription Section */}
+            <div className="mt-6">
+              <h3 className="text-gray-900 text-base mb-3" style={{ fontWeight: 600 }}>
+                Assinaturas
+              </h3>
+
+              {/* Monthly Plan */}
+              <button
+                type="button"
+                onClick={() => handlePlanClick("monthly")}
+                className="w-full flex items-center justify-between py-3 px-4 rounded-xl mb-3 transition-all duration-200 hover:opacity-90"
+                style={{ background: "linear-gradient(135deg, #F5D0B5, #EDBE9E)" }}
+              >
+                <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"1 m\u00eas"}</span>
+                <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 19,90</span>
+              </button>
+            </div>
+
+            {/* Promotions Section */}
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => setShowPromos(!showPromos)}
+                className="flex items-center justify-between w-full"
+              >
+                <h3 className="text-gray-900 text-base" style={{ fontWeight: 600 }}>
+                  {"Promo\u00e7\u00f5es"}
+                </h3>
+                {showPromos ? (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
+
+              {showPromos && (
+                <div className="mt-3 space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => handlePlanClick("quarterly")}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg, #F0C4A0, #E8A87C)" }}
+                  >
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"3 meses (15% off )"}</span>
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 50,74</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handlePlanClick("yearly")}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg, #EEBC96, #E5A478)" }}
+                  >
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 500 }}>{"6 meses (20% off )"}</span>
+                    <span className="text-gray-800 text-sm" style={{ fontWeight: 600 }}>R$ 95,52</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Plan Selection */}
-        <div className="mt-8 space-y-3">
-          <h2 className="text-gray-900 text-base text-center mb-4">Escolha seu plano</h2>
-
-          {/* Monthly Plan */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("monthly")}
-            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
-              selectedPlan === "monthly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/5"
-                : "border-gray-200 bg-gray-50 hover:border-gray-300"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "monthly" ? "border-[#FF6B00]" : "border-gray-300"
-                }`}
-              >
-                {selectedPlan === "monthly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
-              </div>
-              <div className="text-left">
-                <p className="text-gray-900 text-sm">Mensal</p>
-                <p className="text-gray-400 text-xs line-through">R$ {plans.monthly.original}</p>
-              </div>
-            </div>
-            <div className="text-right flex items-center gap-2">
-              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.monthly.discount}</span>
-              <p className="text-gray-900 text-sm">
-                R$ {plans.monthly.price}
-                <span className="text-gray-400 text-xs">{plans.monthly.period}</span>
-              </p>
-            </div>
-          </button>
-
-          {/* Quarterly Plan */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("quarterly")}
-            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${
-              selectedPlan === "quarterly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/5"
-                : "border-gray-200 bg-gray-50 hover:border-gray-300"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "quarterly" ? "border-[#FF6B00]" : "border-gray-300"
-                }`}
-              >
-                {selectedPlan === "quarterly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
-              </div>
-              <div className="text-left">
-                <p className="text-gray-900 text-sm">Trimestral</p>
-                <p className="text-gray-400 text-xs line-through">R$ {plans.quarterly.original}</p>
-              </div>
-            </div>
-            <div className="text-right flex items-center gap-2">
-              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.quarterly.discount}</span>
-              <p className="text-gray-900 text-sm">
-                R$ {plans.quarterly.price}
-                <span className="text-gray-400 text-xs">{plans.quarterly.period}</span>
-              </p>
-            </div>
-          </button>
-
-          {/* Yearly Plan */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("yearly")}
-            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-200 relative ${
-              selectedPlan === "yearly"
-                ? "border-[#FF6B00] bg-[#FF6B00]/5"
-                : "border-gray-200 bg-gray-50 hover:border-gray-300"
-            }`}
-          >
-            <div className="absolute -top-2.5 left-4 bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">
-              Mais popular
-            </div>
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedPlan === "yearly" ? "border-[#FF6B00]" : "border-gray-300"
-                }`}
-              >
-                {selectedPlan === "yearly" && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B00]" />}
-              </div>
-              <div className="text-left">
-                <p className="text-gray-900 text-sm">Anual</p>
-                <p className="text-gray-400 text-xs line-through">R$ {plans.yearly.original}</p>
-              </div>
-            </div>
-            <div className="text-right flex items-center gap-2">
-              <span className="bg-[#FF6B00] text-white text-xs px-2 py-0.5 rounded-full">{plans.yearly.discount}</span>
-              <p className="text-gray-900 text-sm">
-                R$ {plans.yearly.price}
-                <span className="text-gray-400 text-xs">{plans.yearly.period}</span>
-              </p>
-            </div>
-          </button>
-        </div>
-
-        {/* Subscribe Button */}
-        <button
-          type="button"
-          onClick={handleSubscribe}
-          className="w-full mt-6 py-4 rounded-xl text-white text-base transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
-          style={{
-            background: "linear-gradient(135deg, #FF6B00, #FF8C00)",
-          }}
-        >
-          Assinar por R$ {currentPlan.price}{currentPlan.period}
-        </button>
-
-        {/* Savings info */}
-        {currentPlan.savings && (
-          <p className="text-[#FF6B00] text-xs text-center mt-2">{currentPlan.savings}</p>
-        )}
-
-        {/* Security & Info */}
-        <div className="mt-6 space-y-3 pb-8">
-          <div className="flex items-center justify-center gap-2 text-gray-400 text-xs">
-            <Lock className="w-3 h-3" />
-            <span>Pagamento seguro e sigiloso</span>
+        {/* Tabs Section */}
+        <div className="bg-white rounded-2xl shadow-sm mt-3 overflow-hidden">
+          <div className="flex border-b border-gray-100">
+            <button
+              type="button"
+              onClick={() => setActiveTab("posts")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm transition-colors ${
+                activeTab === "posts"
+                  ? "border-b-2"
+                  : "text-gray-500"
+              }`}
+              style={activeTab === "posts" ? { color: "#E8774A", borderColor: "#E8774A" } : {}}
+            >
+              <FileText className="w-4 h-4" />
+              <span>27 Postagens</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("media")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm transition-colors ${
+                activeTab === "media"
+                  ? "border-b-2"
+                  : "text-gray-500"
+              }`}
+              style={activeTab === "media" ? { color: "#E8774A", borderColor: "#E8774A" } : {}}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              {"25 M\u00eddias"}
+            </button>
           </div>
 
-          {/* Features */}
-          <div className="bg-gray-50 rounded-xl p-4 space-y-3 border border-gray-100">
+          {/* Post Preview */}
+          <div className="p-4">
             <div className="flex items-center gap-3">
-              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-700 text-sm">Acesso a todo conteudo exclusivo</span>
+              <img
+                src="/images/profile-gemeas-final.jpg"
+                alt="Gemeas Scarlatt"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm text-gray-900" style={{ fontWeight: 600 }}>
+                    {"G\u00eameas Scarlatt"}
+                  </span>
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="11" fill="#E8774A" />
+                    <path d="M9.5 14.5L6 11l1.4-1.4 2.1 2.1 4.6-4.6L15.5 8.5 9.5 14.5z" fill="white" />
+                  </svg>
+                </div>
+                <p className="text-xs text-gray-500">@Gemeasscarlatt</p>
+              </div>
+              <button type="button" className="text-gray-400">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="2" />
+                  <circle cx="12" cy="12" r="2" />
+                  <circle cx="12" cy="19" r="2" />
+                </svg>
+              </button>
             </div>
-            <div className="flex items-center gap-3">
-              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-700 text-sm">Fotos e videos diarios</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-700 text-sm">Chat direto com as gemeas</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Check className="w-4 h-4 text-[#FF6B00] flex-shrink-0" />
-              <span className="text-gray-700 text-sm">Cancele quando quiser</span>
+
+            {/* Blurred preview content */}
+            <div className="mt-3 rounded-xl overflow-hidden relative">
+              <img
+                src="https://i.postimg.cc/XvTzcSDy/Quality-Restoration-Ultra-HD-Design-sem-nome.jpg"
+                alt="Preview"
+                className="w-full h-48 object-cover"
+                style={{ filter: "blur(20px)" }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full p-3">
+                  <Lock className="w-6 h-6 text-gray-600" />
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* FAQ */}
-          <details className="bg-gray-50 rounded-xl border border-gray-100">
-            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-700 text-sm">
-              Como funciona?
-              <ChevronDown className="w-4 h-4 text-gray-400" />
-            </summary>
-            <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
-              {"Escolha seu plano, finalize o pagamento e tenha acesso imediato a todo conteudo exclusivo. O pagamento e recorrente e voce pode cancelar a qualquer momento."}
-            </div>
-          </details>
-
-          <details className="bg-gray-50 rounded-xl border border-gray-100">
-            <summary className="flex items-center justify-between p-4 cursor-pointer text-gray-700 text-sm">
-              {"E seguro?"}
-              <ChevronDown className="w-4 h-4 text-gray-400" />
-            </summary>
-            <div className="px-4 pb-4 text-gray-500 text-xs leading-relaxed">
-              {"Sim! Todos os pagamentos sao processados de forma segura e sigilosa. Nenhuma informacao aparece na fatura do cartao."}
-            </div>
-          </details>
         </div>
+
+        {/* Spacer */}
+        <div className="h-6" />
       </div>
 
       {/* Meta Pixel Code */}
